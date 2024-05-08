@@ -102,10 +102,88 @@ void ServerClient::ListenForConnections(int port) {
     std::shared_ptr<CryptoDriver> crypto_driver =
         std::make_shared<CryptoDriver>();
     network_driver->listen(port);
-    std::thread connection_thread(&ServerClient::HandleConnection, this,
-                                  network_driver, crypto_driver);
+    std::thread connection_thread(&ServerClient::HandleGCConnection, this,
+                                  network_driver, crypto_driver, 0);
+    this->threads.push_back(connection_thread);
     connection_thread.detach();
   }
+}
+
+bool ServerClient::HandleGCConnection(
+  std::shared_ptr<NetworkDriver> network_driver,
+  std::shared_ptr<CryptoDriver> crypto_driver, int id){
+  
+  auto keys = HandleKeyExchange(network_driver, crypto_driver);
+
+
+  while(1){
+    UserToUser_Message_Message msg;
+    std::vector<unsigned char> data = network_driver->read();
+    msg.serialize(data);
+    network_driver->send(data);
+  }
+  return true;
+}
+
+void ServerClient::ReceiveThread(
+    std::pair<CryptoPP::SecByteBlock, CryptoPP::SecByteBlock> keys, 
+    std::shared_ptr<NetworkDriver> network_driver,
+    std::shared_ptr<CryptoDriver> crypto_driver) {
+  while (true) {
+    std::vector<unsigned char> encrypted_msg_data;
+    try {
+      encrypted_msg_data = network_driver->read();
+    } catch (std::runtime_error &_) {
+      this->cli_driver->print_info("Received EOF; closing connection.");
+      return;
+    }
+    // Check if HMAC is valid.
+    auto msg_data = crypto_driver->decrypt_and_verify(
+        keys.first, keys.second, encrypted_msg_data);
+    if (!msg_data.second) {
+      this->cli_driver->print_warning(
+          "Invalid MAC on message; closing connection.");
+      network_driver->disconnect();
+      throw std::runtime_error("User sent message with invalid MAC.");
+    }
+
+    // Decrypt and print.
+    UserToUser_Message_Message u2u_msg;
+    u2u_msg.deserialize(msg_data.first);
+    this->cli_driver->print_left(u2u_msg.msg);
+  }
+}
+
+/**
+ * Listen for stdin and send to other party.
+ */
+void ServerClient::SendThread(
+    std::pair<CryptoPP::SecByteBlock, CryptoPP::SecByteBlock> keys, 
+    std::shared_ptr<NetworkDriver> network_driver,
+    std::shared_ptr<CryptoDriver> crypto_driver) {
+  std::string plaintext;
+  while (std::getline(std::cin, plaintext)) {
+    // Read from STDIN.
+    if (plaintext != "") {
+      UserToUser_Message_Message u2u_msg;
+      u2u_msg.msg = plaintext;
+
+      std::vector<unsigned char> msg_data =
+          crypto_driver->encrypt_and_tag(keys.first, keys.second,
+                                               &u2u_msg);
+      try {
+        network_driver->send(msg_data);
+      } catch (std::runtime_error &_) {
+        this->cli_driver->print_info(
+            "Other side is closed, closing connection");
+        network_driver->disconnect();
+        return;
+      }
+    }
+    this->cli_driver->print_right(plaintext);
+  }
+  this->cli_driver->print_info("Received EOF from user; closing connection");
+  network_driver->disconnect();
 }
 
 /**

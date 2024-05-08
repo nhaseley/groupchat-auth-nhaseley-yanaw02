@@ -21,6 +21,8 @@ class ServerClient {
 public:
   ServerClient(ServerConfig server_config);
   void run(int port);
+  bool HandleGCConnection(std::shared_ptr<NetworkDriver> network_driver,
+                        std::shared_ptr<CryptoDriver> crypto_driver, int id);
   bool HandleConnection(std::shared_ptr<NetworkDriver> network_driver,
                         std::shared_ptr<CryptoDriver> crypto_driver);
   std::pair<CryptoPP::SecByteBlock, CryptoPP::SecByteBlock>
@@ -46,4 +48,14 @@ private:
   void ListenForConnections(int port);
   void Reset(std::string _);
   void Users(std::string _);
+
+  void ReceiveThread(std::pair<CryptoPP::SecByteBlock, CryptoPP::SecByteBlock> keys, 
+    std::shared_ptr<NetworkDriver> network_driver,
+    std::shared_ptr<CryptoDriver> crypto_driver);
+  void SendThread(
+    std::pair<CryptoPP::SecByteBlock, CryptoPP::SecByteBlock> keys, 
+    std::shared_ptr<NetworkDriver> network_driver,
+    std::shared_ptr<CryptoDriver> crypto_driver);
+
+  std::vector<std::thread> threads;
 };

@@ -48,10 +48,10 @@ RM = /usr/bin/cmake -E remove -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/cs1515-user/groupchat-auth-nhaseley-ywang
+CMAKE_SOURCE_DIR = /home/cs1515-user/auth-yanaw02
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/cs1515-user/groupchat-auth-nhaseley-ywang/build
+CMAKE_BINARY_DIR = /home/cs1515-user/auth-yanaw02/build
 
 #=============================================================================
 # Targets provided globally by CMake.
@@ -137,14 +137,14 @@ test/fast: test
 
 # The main all target
 all: cmake_check_build_system
-	cd /home/cs1515-user/groupchat-auth-nhaseley-ywang/build && $(CMAKE_COMMAND) -E cmake_progress_start /home/cs1515-user/groupchat-auth-nhaseley-ywang/build/CMakeFiles /home/cs1515-user/groupchat-auth-nhaseley-ywang/build/test/CMakeFiles/progress.marks
-	cd /home/cs1515-user/groupchat-auth-nhaseley-ywang/build && $(MAKE) -f CMakeFiles/Makefile2 test/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/cs1515-user/groupchat-auth-nhaseley-ywang/build/CMakeFiles 0
+	cd /home/cs1515-user/auth-yanaw02/build && $(CMAKE_COMMAND) -E cmake_progress_start /home/cs1515-user/auth-yanaw02/build/CMakeFiles /home/cs1515-user/auth-yanaw02/build/test/CMakeFiles/progress.marks
+	cd /home/cs1515-user/auth-yanaw02/build && $(MAKE) -f CMakeFiles/Makefile2 test/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/cs1515-user/auth-yanaw02/build/CMakeFiles 0
 .PHONY : all
 
 # The main clean target
 clean:
-	cd /home/cs1515-user/groupchat-auth-nhaseley-ywang/build && $(MAKE) -f CMakeFiles/Makefile2 test/clean
+	cd /home/cs1515-user/auth-yanaw02/build && $(MAKE) -f CMakeFiles/Makefile2 test/clean
 .PHONY : clean
 
 # The main clean target
@@ -154,22 +154,22 @@ clean/fast: clean
 
 # Prepare targets for installation.
 preinstall: all
-	cd /home/cs1515-user/groupchat-auth-nhaseley-ywang/build && $(MAKE) -f CMakeFiles/Makefile2 test/preinstall
+	cd /home/cs1515-user/auth-yanaw02/build && $(MAKE) -f CMakeFiles/Makefile2 test/preinstall
 .PHONY : preinstall
 
 # Prepare targets for installation.
 preinstall/fast:
-	cd /home/cs1515-user/groupchat-auth-nhaseley-ywang/build && $(MAKE) -f CMakeFiles/Makefile2 test/preinstall
+	cd /home/cs1515-user/auth-yanaw02/build && $(MAKE) -f CMakeFiles/Makefile2 test/preinstall
 .PHONY : preinstall/fast
 
 # clear depends
 depend:
-	cd /home/cs1515-user/groupchat-auth-nhaseley-ywang/build && $(CMAKE_COMMAND) -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 1
+	cd /home/cs1515-user/auth-yanaw02/build && $(CMAKE_COMMAND) -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 1
 .PHONY : depend
 
 # Convenience name for target.
 test/CMakeFiles/unit_tests.dir/rule:
-	cd /home/cs1515-user/groupchat-auth-nhaseley-ywang/build && $(MAKE) -f CMakeFiles/Makefile2 test/CMakeFiles/unit_tests.dir/rule
+	cd /home/cs1515-user/auth-yanaw02/build && $(MAKE) -f CMakeFiles/Makefile2 test/CMakeFiles/unit_tests.dir/rule
 .PHONY : test/CMakeFiles/unit_tests.dir/rule
 
 # Convenience name for target.
@@ -179,7 +179,7 @@ unit_tests: test/CMakeFiles/unit_tests.dir/rule
 
 # fast build rule for target.
 unit_tests/fast:
-	cd /home/cs1515-user/groupchat-auth-nhaseley-ywang/build && $(MAKE) -f test/CMakeFiles/unit_tests.dir/build.make test/CMakeFiles/unit_tests.dir/build
+	cd /home/cs1515-user/auth-yanaw02/build && $(MAKE) -f test/CMakeFiles/unit_tests.dir/build.make test/CMakeFiles/unit_tests.dir/build
 .PHONY : unit_tests/fast
 
 test_provided.o: test_provided.cxx.o
@@ -188,7 +188,7 @@ test_provided.o: test_provided.cxx.o
 
 # target to build an object file
 test_provided.cxx.o:
-	cd /home/cs1515-user/groupchat-auth-nhaseley-ywang/build && $(MAKE) -f test/CMakeFiles/unit_tests.dir/build.make test/CMakeFiles/unit_tests.dir/test_provided.cxx.o
+	cd /home/cs1515-user/auth-yanaw02/build && $(MAKE) -f test/CMakeFiles/unit_tests.dir/build.make test/CMakeFiles/unit_tests.dir/test_provided.cxx.o
 .PHONY : test_provided.cxx.o
 
 test_provided.i: test_provided.cxx.i
@@ -197,7 +197,7 @@ test_provided.i: test_provided.cxx.i
 
 # target to preprocess a source file
 test_provided.cxx.i:
-	cd /home/cs1515-user/groupchat-auth-nhaseley-ywang/build && $(MAKE) -f test/CMakeFiles/unit_tests.dir/build.make test/CMakeFiles/unit_tests.dir/test_provided.cxx.i
+	cd /home/cs1515-user/auth-yanaw02/build && $(MAKE) -f test/CMakeFiles/unit_tests.dir/build.make test/CMakeFiles/unit_tests.dir/test_provided.cxx.i
 .PHONY : test_provided.cxx.i
 
 test_provided.s: test_provided.cxx.s
@@ -206,7 +206,7 @@ test_provided.s: test_provided.cxx.s
 
 # target to generate assembly for a file
 test_provided.cxx.s:
-	cd /home/cs1515-user/groupchat-auth-nhaseley-ywang/build && $(MAKE) -f test/CMakeFiles/unit_tests.dir/build.make test/CMakeFiles/unit_tests.dir/test_provided.cxx.s
+	cd /home/cs1515-user/auth-yanaw02/build && $(MAKE) -f test/CMakeFiles/unit_tests.dir/build.make test/CMakeFiles/unit_tests.dir/test_provided.cxx.s
 .PHONY : test_provided.cxx.s
 
 # Help Target
@@ -237,6 +237,6 @@ help:
 # No rule that depends on this can have commands that come from listfiles
 # because they might be regenerated.
 cmake_check_build_system:
-	cd /home/cs1515-user/groupchat-auth-nhaseley-ywang/build && $(CMAKE_COMMAND) -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 0
+	cd /home/cs1515-user/auth-yanaw02/build && $(CMAKE_COMMAND) -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 0
 .PHONY : cmake_check_build_system
 

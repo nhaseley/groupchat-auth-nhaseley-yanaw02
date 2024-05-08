@@ -771,8 +771,8 @@ WARN_LOGFILE           =
 # spaces. See also FILE_PATTERNS and EXTENSION_MAPPING
 # Note: If this tag is empty the current directory is searched.
 
-INPUT = /home/cs1515-user/groupchat-auth-nhaseley-ywang/README.md
-INPUT                  += /home/cs1515-user/groupchat-auth-nhaseley-ywang/include/ /home/cs1515-user/groupchat-auth-nhaseley-ywang/src
+INPUT = /home/cs1515-user/auth-yanaw02/README.md
+INPUT                  += /home/cs1515-user/auth-yanaw02/include/ /home/cs1515-user/auth-yanaw02/src
 
 
 FILE_PATTERNS += *.md *.markdown
@@ -924,7 +924,7 @@ FILTER_SOURCE_PATTERNS =
 # (index.html). This can be useful if you have a project on for instance GitHub
 # and want to reuse the introduction page also for the doxygen output.
 
-USE_MDFILE_AS_MAINPAGE = /home/cs1515-user/groupchat-auth-nhaseley-ywang/README.md
+USE_MDFILE_AS_MAINPAGE = /home/cs1515-user/auth-yanaw02/README.md
 
 
 #---------------------------------------------------------------------------

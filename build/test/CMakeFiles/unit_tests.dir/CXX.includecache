@@ -6,9 +6,9 @@
 
 #IncludeRegexTransform: 
 
-/home/cs1515-user/groupchat-auth-nhaseley-ywang/test/test_provided.cxx
+/home/cs1515-user/auth-yanaw02/test/test_provided.cxx
 doctest/doctest.h
-/home/cs1515-user/groupchat-auth-nhaseley-ywang/test/doctest/doctest.h
+/home/cs1515-user/auth-yanaw02/test/doctest/doctest.h
 
 _deps/doctest-src/doctest/doctest.h
 signal.h

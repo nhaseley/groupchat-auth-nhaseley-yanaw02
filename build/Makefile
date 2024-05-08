@@ -48,10 +48,10 @@ RM = /usr/bin/cmake -E remove -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/cs1515-user/groupchat-auth-nhaseley-ywang
+CMAKE_SOURCE_DIR = /home/cs1515-user/auth-yanaw02
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/cs1515-user/groupchat-auth-nhaseley-ywang/build
+CMAKE_BINARY_DIR = /home/cs1515-user/auth-yanaw02/build
 
 #=============================================================================
 # Targets provided globally by CMake.
@@ -80,6 +80,16 @@ install/local/fast: preinstall/fast
 	/usr/bin/cmake -DCMAKE_INSTALL_LOCAL_ONLY=1 -P cmake_install.cmake
 .PHONY : install/local/fast
 
+# Special rule for the target list_install_components
+list_install_components:
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Available install components are: \"Unspecified\""
+.PHONY : list_install_components
+
+# Special rule for the target list_install_components
+list_install_components/fast: list_install_components
+
+.PHONY : list_install_components/fast
+
 # Special rule for the target rebuild_cache
 rebuild_cache:
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Running CMake to regenerate build system..."
@@ -90,16 +100,6 @@ rebuild_cache:
 rebuild_cache/fast: rebuild_cache
 
 .PHONY : rebuild_cache/fast
-
-# Special rule for the target list_install_components
-list_install_components:
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Available install components are: \"Unspecified\""
-.PHONY : list_install_components
-
-# Special rule for the target list_install_components
-list_install_components/fast: list_install_components
-
-.PHONY : list_install_components/fast
 
 # Special rule for the target edit_cache
 edit_cache:
@@ -137,9 +137,9 @@ install/fast: preinstall/fast
 
 # The main all target
 all: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/cs1515-user/groupchat-auth-nhaseley-ywang/build/CMakeFiles /home/cs1515-user/groupchat-auth-nhaseley-ywang/build/CMakeFiles/progress.marks
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/cs1515-user/auth-yanaw02/build/CMakeFiles /home/cs1515-user/auth-yanaw02/build/CMakeFiles/progress.marks
 	$(MAKE) -f CMakeFiles/Makefile2 all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/cs1515-user/groupchat-auth-nhaseley-ywang/build/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/cs1515-user/auth-yanaw02/build/CMakeFiles 0
 .PHONY : all
 
 # The main clean target
@@ -181,32 +181,6 @@ check/fast:
 .PHONY : check/fast
 
 #=============================================================================
-# Target rules for targets named groupchat_auth_server
-
-# Build rule for target.
-groupchat_auth_server: cmake_check_build_system
-	$(MAKE) -f CMakeFiles/Makefile2 groupchat_auth_server
-.PHONY : groupchat_auth_server
-
-# fast build rule for target.
-groupchat_auth_server/fast:
-	$(MAKE) -f CMakeFiles/groupchat_auth_server.dir/build.make CMakeFiles/groupchat_auth_server.dir/build
-.PHONY : groupchat_auth_server/fast
-
-#=============================================================================
-# Target rules for targets named groupchat_auth_user
-
-# Build rule for target.
-groupchat_auth_user: cmake_check_build_system
-	$(MAKE) -f CMakeFiles/Makefile2 groupchat_auth_user
-.PHONY : groupchat_auth_user
-
-# fast build rule for target.
-groupchat_auth_user/fast:
-	$(MAKE) -f CMakeFiles/groupchat_auth_user.dir/build.make CMakeFiles/groupchat_auth_user.dir/build
-.PHONY : groupchat_auth_user/fast
-
-#=============================================================================
 # Target rules for targets named auth_app_lib_shared
 
 # Build rule for target.
@@ -231,6 +205,19 @@ NightlyMemCheck: cmake_check_build_system
 NightlyMemCheck/fast:
 	$(MAKE) -f CMakeFiles/NightlyMemCheck.dir/build.make CMakeFiles/NightlyMemCheck.dir/build
 .PHONY : NightlyMemCheck/fast
+
+#=============================================================================
+# Target rules for targets named auth_user
+
+# Build rule for target.
+auth_user: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 auth_user
+.PHONY : auth_user
+
+# fast build rule for target.
+auth_user/fast:
+	$(MAKE) -f CMakeFiles/auth_user.dir/build.make CMakeFiles/auth_user.dir/build
+.PHONY : auth_user/fast
 
 #=============================================================================
 # Target rules for targets named NightlyTest
@@ -322,6 +309,19 @@ NightlyMemoryCheck: cmake_check_build_system
 NightlyMemoryCheck/fast:
 	$(MAKE) -f CMakeFiles/NightlyMemoryCheck.dir/build.make CMakeFiles/NightlyMemoryCheck.dir/build
 .PHONY : NightlyMemoryCheck/fast
+
+#=============================================================================
+# Target rules for targets named auth_server
+
+# Build rule for target.
+auth_server: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 auth_server
+.PHONY : auth_server
+
+# fast build rule for target.
+auth_server/fast:
+	$(MAKE) -f CMakeFiles/auth_server.dir/build.make CMakeFiles/auth_server.dir/build
+.PHONY : auth_server/fast
 
 #=============================================================================
 # Target rules for targets named ExperimentalTest
@@ -776,7 +776,7 @@ src/cmd/server.o: src/cmd/server.cxx.o
 
 # target to build an object file
 src/cmd/server.cxx.o:
-	$(MAKE) -f CMakeFiles/groupchat_auth_server.dir/build.make CMakeFiles/groupchat_auth_server.dir/src/cmd/server.cxx.o
+	$(MAKE) -f CMakeFiles/auth_server.dir/build.make CMakeFiles/auth_server.dir/src/cmd/server.cxx.o
 .PHONY : src/cmd/server.cxx.o
 
 src/cmd/server.i: src/cmd/server.cxx.i
@@ -785,7 +785,7 @@ src/cmd/server.i: src/cmd/server.cxx.i
 
 # target to preprocess a source file
 src/cmd/server.cxx.i:
-	$(MAKE) -f CMakeFiles/groupchat_auth_server.dir/build.make CMakeFiles/groupchat_auth_server.dir/src/cmd/server.cxx.i
+	$(MAKE) -f CMakeFiles/auth_server.dir/build.make CMakeFiles/auth_server.dir/src/cmd/server.cxx.i
 .PHONY : src/cmd/server.cxx.i
 
 src/cmd/server.s: src/cmd/server.cxx.s
@@ -794,7 +794,7 @@ src/cmd/server.s: src/cmd/server.cxx.s
 
 # target to generate assembly for a file
 src/cmd/server.cxx.s:
-	$(MAKE) -f CMakeFiles/groupchat_auth_server.dir/build.make CMakeFiles/groupchat_auth_server.dir/src/cmd/server.cxx.s
+	$(MAKE) -f CMakeFiles/auth_server.dir/build.make CMakeFiles/auth_server.dir/src/cmd/server.cxx.s
 .PHONY : src/cmd/server.cxx.s
 
 src/cmd/user.o: src/cmd/user.cxx.o
@@ -803,7 +803,7 @@ src/cmd/user.o: src/cmd/user.cxx.o
 
 # target to build an object file
 src/cmd/user.cxx.o:
-	$(MAKE) -f CMakeFiles/groupchat_auth_user.dir/build.make CMakeFiles/groupchat_auth_user.dir/src/cmd/user.cxx.o
+	$(MAKE) -f CMakeFiles/auth_user.dir/build.make CMakeFiles/auth_user.dir/src/cmd/user.cxx.o
 .PHONY : src/cmd/user.cxx.o
 
 src/cmd/user.i: src/cmd/user.cxx.i
@@ -812,7 +812,7 @@ src/cmd/user.i: src/cmd/user.cxx.i
 
 # target to preprocess a source file
 src/cmd/user.cxx.i:
-	$(MAKE) -f CMakeFiles/groupchat_auth_user.dir/build.make CMakeFiles/groupchat_auth_user.dir/src/cmd/user.cxx.i
+	$(MAKE) -f CMakeFiles/auth_user.dir/build.make CMakeFiles/auth_user.dir/src/cmd/user.cxx.i
 .PHONY : src/cmd/user.cxx.i
 
 src/cmd/user.s: src/cmd/user.cxx.s
@@ -821,7 +821,7 @@ src/cmd/user.s: src/cmd/user.cxx.s
 
 # target to generate assembly for a file
 src/cmd/user.cxx.s:
-	$(MAKE) -f CMakeFiles/groupchat_auth_user.dir/build.make CMakeFiles/groupchat_auth_user.dir/src/cmd/user.cxx.s
+	$(MAKE) -f CMakeFiles/auth_user.dir/build.make CMakeFiles/auth_user.dir/src/cmd/user.cxx.s
 .PHONY : src/cmd/user.cxx.s
 
 src/drivers/cli_driver.o: src/drivers/cli_driver.cxx.o
@@ -1021,14 +1021,13 @@ help:
 	@echo "... depend"
 	@echo "... install/strip"
 	@echo "... install/local"
+	@echo "... list_install_components"
 	@echo "... rebuild_cache"
 	@echo "... check"
-	@echo "... list_install_components"
-	@echo "... groupchat_auth_server"
-	@echo "... groupchat_auth_user"
 	@echo "... auth_app_lib_shared"
 	@echo "... edit_cache"
 	@echo "... NightlyMemCheck"
+	@echo "... auth_user"
 	@echo "... NightlyTest"
 	@echo "... test"
 	@echo "... doc"
@@ -1037,6 +1036,7 @@ help:
 	@echo "... auth_app_lib"
 	@echo "... NightlyConfigure"
 	@echo "... NightlyMemoryCheck"
+	@echo "... auth_server"
 	@echo "... ExperimentalTest"
 	@echo "... ContinuousUpdate"
 	@echo "... NightlyUpdate"

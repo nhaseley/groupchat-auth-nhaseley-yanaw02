@@ -6,5 +6,5 @@ CXX_FLAGS = -g
 
 CXX_DEFINES = -DBOOST_ALL_NO_LIB -DENABLE_DOCTEST_IN_LIBRARY
 
-CXX_INCLUDES = -I/home/cs1515-user/groupchat-auth-nhaseley-ywang/include-shared -I/home/cs1515-user/groupchat-auth-nhaseley-ywang/build/_deps/doctest-src 
+CXX_INCLUDES = -I/home/cs1515-user/auth-yanaw02/include-shared -I/home/cs1515-user/auth-yanaw02/build/_deps/doctest-src 
 

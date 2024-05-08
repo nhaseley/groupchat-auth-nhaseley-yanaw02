@@ -43,10 +43,10 @@ RM = /usr/bin/cmake -E remove -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/cs1515-user/groupchat-auth-nhaseley-ywang
+CMAKE_SOURCE_DIR = /home/cs1515-user/auth-yanaw02
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/cs1515-user/groupchat-auth-nhaseley-ywang/build
+CMAKE_BINARY_DIR = /home/cs1515-user/auth-yanaw02/build
 
 # Utility rule file for ExperimentalStart.
 
@@ -71,6 +71,6 @@ CMakeFiles/ExperimentalStart.dir/clean:
 .PHONY : CMakeFiles/ExperimentalStart.dir/clean
 
 CMakeFiles/ExperimentalStart.dir/depend:
-	cd /home/cs1515-user/groupchat-auth-nhaseley-ywang/build && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/cs1515-user/groupchat-auth-nhaseley-ywang /home/cs1515-user/groupchat-auth-nhaseley-ywang /home/cs1515-user/groupchat-auth-nhaseley-ywang/build /home/cs1515-user/groupchat-auth-nhaseley-ywang/build /home/cs1515-user/groupchat-auth-nhaseley-ywang/build/CMakeFiles/ExperimentalStart.dir/DependInfo.cmake --color=$(COLOR)
+	cd /home/cs1515-user/auth-yanaw02/build && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/cs1515-user/auth-yanaw02 /home/cs1515-user/auth-yanaw02 /home/cs1515-user/auth-yanaw02/build /home/cs1515-user/auth-yanaw02/build /home/cs1515-user/auth-yanaw02/build/CMakeFiles/ExperimentalStart.dir/DependInfo.cmake --color=$(COLOR)
 .PHONY : CMakeFiles/ExperimentalStart.dir/depend
 

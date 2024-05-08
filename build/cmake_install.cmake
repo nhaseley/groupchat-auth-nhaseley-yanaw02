@@ -1,4 +1,4 @@
-# Install script for directory: /home/cs1515-user/groupchat-auth-nhaseley-ywang
+# Install script for directory: /home/cs1515-user/auth-yanaw02
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
@@ -39,8 +39,8 @@ endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for each subdirectory.
-  include("/home/cs1515-user/groupchat-auth-nhaseley-ywang/build/_deps/doctest-build/cmake_install.cmake")
-  include("/home/cs1515-user/groupchat-auth-nhaseley-ywang/build/test/cmake_install.cmake")
+  include("/home/cs1515-user/auth-yanaw02/build/_deps/doctest-build/cmake_install.cmake")
+  include("/home/cs1515-user/auth-yanaw02/build/test/cmake_install.cmake")
 
 endif()
 
@@ -52,5 +52,5 @@ endif()
 
 string(REPLACE ";" "\n" CMAKE_INSTALL_MANIFEST_CONTENT
        "${CMAKE_INSTALL_MANIFEST_FILES}")
-file(WRITE "/home/cs1515-user/groupchat-auth-nhaseley-ywang/build/${CMAKE_INSTALL_MANIFEST}"
+file(WRITE "/home/cs1515-user/auth-yanaw02/build/${CMAKE_INSTALL_MANIFEST}"
      "${CMAKE_INSTALL_MANIFEST_CONTENT}")

@@ -43,10 +43,10 @@ RM = /usr/bin/cmake -E remove -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/cs1515-user/groupchat-auth-nhaseley-ywang
+CMAKE_SOURCE_DIR = /home/cs1515-user/auth-yanaw02
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/cs1515-user/groupchat-auth-nhaseley-ywang/build
+CMAKE_BINARY_DIR = /home/cs1515-user/auth-yanaw02/build
 
 # Include any dependencies generated for this target.
 include CMakeFiles/auth_app_lib_shared.dir/depend.make
@@ -59,68 +59,68 @@ include CMakeFiles/auth_app_lib_shared.dir/flags.make
 
 CMakeFiles/auth_app_lib_shared.dir/src-shared/config.cxx.o: CMakeFiles/auth_app_lib_shared.dir/flags.make
 CMakeFiles/auth_app_lib_shared.dir/src-shared/config.cxx.o: ../src-shared/config.cxx
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/cs1515-user/groupchat-auth-nhaseley-ywang/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object CMakeFiles/auth_app_lib_shared.dir/src-shared/config.cxx.o"
-	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/auth_app_lib_shared.dir/src-shared/config.cxx.o -c /home/cs1515-user/groupchat-auth-nhaseley-ywang/src-shared/config.cxx
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/cs1515-user/auth-yanaw02/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object CMakeFiles/auth_app_lib_shared.dir/src-shared/config.cxx.o"
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/auth_app_lib_shared.dir/src-shared/config.cxx.o -c /home/cs1515-user/auth-yanaw02/src-shared/config.cxx
 
 CMakeFiles/auth_app_lib_shared.dir/src-shared/config.cxx.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/auth_app_lib_shared.dir/src-shared/config.cxx.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/cs1515-user/groupchat-auth-nhaseley-ywang/src-shared/config.cxx > CMakeFiles/auth_app_lib_shared.dir/src-shared/config.cxx.i
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/cs1515-user/auth-yanaw02/src-shared/config.cxx > CMakeFiles/auth_app_lib_shared.dir/src-shared/config.cxx.i
 
 CMakeFiles/auth_app_lib_shared.dir/src-shared/config.cxx.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/auth_app_lib_shared.dir/src-shared/config.cxx.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/cs1515-user/groupchat-auth-nhaseley-ywang/src-shared/config.cxx -o CMakeFiles/auth_app_lib_shared.dir/src-shared/config.cxx.s
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/cs1515-user/auth-yanaw02/src-shared/config.cxx -o CMakeFiles/auth_app_lib_shared.dir/src-shared/config.cxx.s
 
 CMakeFiles/auth_app_lib_shared.dir/src-shared/messages.cxx.o: CMakeFiles/auth_app_lib_shared.dir/flags.make
 CMakeFiles/auth_app_lib_shared.dir/src-shared/messages.cxx.o: ../src-shared/messages.cxx
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/cs1515-user/groupchat-auth-nhaseley-ywang/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building CXX object CMakeFiles/auth_app_lib_shared.dir/src-shared/messages.cxx.o"
-	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/auth_app_lib_shared.dir/src-shared/messages.cxx.o -c /home/cs1515-user/groupchat-auth-nhaseley-ywang/src-shared/messages.cxx
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/cs1515-user/auth-yanaw02/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building CXX object CMakeFiles/auth_app_lib_shared.dir/src-shared/messages.cxx.o"
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/auth_app_lib_shared.dir/src-shared/messages.cxx.o -c /home/cs1515-user/auth-yanaw02/src-shared/messages.cxx
 
 CMakeFiles/auth_app_lib_shared.dir/src-shared/messages.cxx.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/auth_app_lib_shared.dir/src-shared/messages.cxx.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/cs1515-user/groupchat-auth-nhaseley-ywang/src-shared/messages.cxx > CMakeFiles/auth_app_lib_shared.dir/src-shared/messages.cxx.i
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/cs1515-user/auth-yanaw02/src-shared/messages.cxx > CMakeFiles/auth_app_lib_shared.dir/src-shared/messages.cxx.i
 
 CMakeFiles/auth_app_lib_shared.dir/src-shared/messages.cxx.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/auth_app_lib_shared.dir/src-shared/messages.cxx.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/cs1515-user/groupchat-auth-nhaseley-ywang/src-shared/messages.cxx -o CMakeFiles/auth_app_lib_shared.dir/src-shared/messages.cxx.s
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/cs1515-user/auth-yanaw02/src-shared/messages.cxx -o CMakeFiles/auth_app_lib_shared.dir/src-shared/messages.cxx.s
 
 CMakeFiles/auth_app_lib_shared.dir/src-shared/logger.cxx.o: CMakeFiles/auth_app_lib_shared.dir/flags.make
 CMakeFiles/auth_app_lib_shared.dir/src-shared/logger.cxx.o: ../src-shared/logger.cxx
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/cs1515-user/groupchat-auth-nhaseley-ywang/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building CXX object CMakeFiles/auth_app_lib_shared.dir/src-shared/logger.cxx.o"
-	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/auth_app_lib_shared.dir/src-shared/logger.cxx.o -c /home/cs1515-user/groupchat-auth-nhaseley-ywang/src-shared/logger.cxx
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/cs1515-user/auth-yanaw02/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building CXX object CMakeFiles/auth_app_lib_shared.dir/src-shared/logger.cxx.o"
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/auth_app_lib_shared.dir/src-shared/logger.cxx.o -c /home/cs1515-user/auth-yanaw02/src-shared/logger.cxx
 
 CMakeFiles/auth_app_lib_shared.dir/src-shared/logger.cxx.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/auth_app_lib_shared.dir/src-shared/logger.cxx.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/cs1515-user/groupchat-auth-nhaseley-ywang/src-shared/logger.cxx > CMakeFiles/auth_app_lib_shared.dir/src-shared/logger.cxx.i
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/cs1515-user/auth-yanaw02/src-shared/logger.cxx > CMakeFiles/auth_app_lib_shared.dir/src-shared/logger.cxx.i
 
 CMakeFiles/auth_app_lib_shared.dir/src-shared/logger.cxx.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/auth_app_lib_shared.dir/src-shared/logger.cxx.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/cs1515-user/groupchat-auth-nhaseley-ywang/src-shared/logger.cxx -o CMakeFiles/auth_app_lib_shared.dir/src-shared/logger.cxx.s
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/cs1515-user/auth-yanaw02/src-shared/logger.cxx -o CMakeFiles/auth_app_lib_shared.dir/src-shared/logger.cxx.s
 
 CMakeFiles/auth_app_lib_shared.dir/src-shared/util.cxx.o: CMakeFiles/auth_app_lib_shared.dir/flags.make
 CMakeFiles/auth_app_lib_shared.dir/src-shared/util.cxx.o: ../src-shared/util.cxx
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/cs1515-user/groupchat-auth-nhaseley-ywang/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building CXX object CMakeFiles/auth_app_lib_shared.dir/src-shared/util.cxx.o"
-	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/auth_app_lib_shared.dir/src-shared/util.cxx.o -c /home/cs1515-user/groupchat-auth-nhaseley-ywang/src-shared/util.cxx
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/cs1515-user/auth-yanaw02/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building CXX object CMakeFiles/auth_app_lib_shared.dir/src-shared/util.cxx.o"
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/auth_app_lib_shared.dir/src-shared/util.cxx.o -c /home/cs1515-user/auth-yanaw02/src-shared/util.cxx
 
 CMakeFiles/auth_app_lib_shared.dir/src-shared/util.cxx.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/auth_app_lib_shared.dir/src-shared/util.cxx.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/cs1515-user/groupchat-auth-nhaseley-ywang/src-shared/util.cxx > CMakeFiles/auth_app_lib_shared.dir/src-shared/util.cxx.i
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/cs1515-user/auth-yanaw02/src-shared/util.cxx > CMakeFiles/auth_app_lib_shared.dir/src-shared/util.cxx.i
 
 CMakeFiles/auth_app_lib_shared.dir/src-shared/util.cxx.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/auth_app_lib_shared.dir/src-shared/util.cxx.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/cs1515-user/groupchat-auth-nhaseley-ywang/src-shared/util.cxx -o CMakeFiles/auth_app_lib_shared.dir/src-shared/util.cxx.s
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/cs1515-user/auth-yanaw02/src-shared/util.cxx -o CMakeFiles/auth_app_lib_shared.dir/src-shared/util.cxx.s
 
 CMakeFiles/auth_app_lib_shared.dir/src-shared/keyloaders.cxx.o: CMakeFiles/auth_app_lib_shared.dir/flags.make
 CMakeFiles/auth_app_lib_shared.dir/src-shared/keyloaders.cxx.o: ../src-shared/keyloaders.cxx
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/cs1515-user/groupchat-auth-nhaseley-ywang/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Building CXX object CMakeFiles/auth_app_lib_shared.dir/src-shared/keyloaders.cxx.o"
-	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/auth_app_lib_shared.dir/src-shared/keyloaders.cxx.o -c /home/cs1515-user/groupchat-auth-nhaseley-ywang/src-shared/keyloaders.cxx
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/cs1515-user/auth-yanaw02/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Building CXX object CMakeFiles/auth_app_lib_shared.dir/src-shared/keyloaders.cxx.o"
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/auth_app_lib_shared.dir/src-shared/keyloaders.cxx.o -c /home/cs1515-user/auth-yanaw02/src-shared/keyloaders.cxx
 
 CMakeFiles/auth_app_lib_shared.dir/src-shared/keyloaders.cxx.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/auth_app_lib_shared.dir/src-shared/keyloaders.cxx.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/cs1515-user/groupchat-auth-nhaseley-ywang/src-shared/keyloaders.cxx > CMakeFiles/auth_app_lib_shared.dir/src-shared/keyloaders.cxx.i
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/cs1515-user/auth-yanaw02/src-shared/keyloaders.cxx > CMakeFiles/auth_app_lib_shared.dir/src-shared/keyloaders.cxx.i
 
 CMakeFiles/auth_app_lib_shared.dir/src-shared/keyloaders.cxx.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/auth_app_lib_shared.dir/src-shared/keyloaders.cxx.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/cs1515-user/groupchat-auth-nhaseley-ywang/src-shared/keyloaders.cxx -o CMakeFiles/auth_app_lib_shared.dir/src-shared/keyloaders.cxx.s
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/cs1515-user/auth-yanaw02/src-shared/keyloaders.cxx -o CMakeFiles/auth_app_lib_shared.dir/src-shared/keyloaders.cxx.s
 
 # Object files for target auth_app_lib_shared
 auth_app_lib_shared_OBJECTS = \
@@ -140,7 +140,7 @@ libauth_app_lib_shared.a: CMakeFiles/auth_app_lib_shared.dir/src-shared/util.cxx
 libauth_app_lib_shared.a: CMakeFiles/auth_app_lib_shared.dir/src-shared/keyloaders.cxx.o
 libauth_app_lib_shared.a: CMakeFiles/auth_app_lib_shared.dir/build.make
 libauth_app_lib_shared.a: CMakeFiles/auth_app_lib_shared.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/cs1515-user/groupchat-auth-nhaseley-ywang/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Linking CXX static library libauth_app_lib_shared.a"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/cs1515-user/auth-yanaw02/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Linking CXX static library libauth_app_lib_shared.a"
 	$(CMAKE_COMMAND) -P CMakeFiles/auth_app_lib_shared.dir/cmake_clean_target.cmake
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/auth_app_lib_shared.dir/link.txt --verbose=$(VERBOSE)
 
@@ -154,6 +154,6 @@ CMakeFiles/auth_app_lib_shared.dir/clean:
 .PHONY : CMakeFiles/auth_app_lib_shared.dir/clean
 
 CMakeFiles/auth_app_lib_shared.dir/depend:
-	cd /home/cs1515-user/groupchat-auth-nhaseley-ywang/build && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/cs1515-user/groupchat-auth-nhaseley-ywang /home/cs1515-user/groupchat-auth-nhaseley-ywang /home/cs1515-user/groupchat-auth-nhaseley-ywang/build /home/cs1515-user/groupchat-auth-nhaseley-ywang/build /home/cs1515-user/groupchat-auth-nhaseley-ywang/build/CMakeFiles/auth_app_lib_shared.dir/DependInfo.cmake --color=$(COLOR)
+	cd /home/cs1515-user/auth-yanaw02/build && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/cs1515-user/auth-yanaw02 /home/cs1515-user/auth-yanaw02 /home/cs1515-user/auth-yanaw02/build /home/cs1515-user/auth-yanaw02/build /home/cs1515-user/auth-yanaw02/build/CMakeFiles/auth_app_lib_shared.dir/DependInfo.cmake --color=$(COLOR)
 .PHONY : CMakeFiles/auth_app_lib_shared.dir/depend
 

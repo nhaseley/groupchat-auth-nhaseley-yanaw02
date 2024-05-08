@@ -43,10 +43,10 @@ RM = /usr/bin/cmake -E remove -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/cs1515-user/groupchat-auth-nhaseley-ywang
+CMAKE_SOURCE_DIR = /home/cs1515-user/auth-yanaw02
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/cs1515-user/groupchat-auth-nhaseley-ywang/build
+CMAKE_BINARY_DIR = /home/cs1515-user/auth-yanaw02/build
 
 # Utility rule file for doc.
 
@@ -54,8 +54,8 @@ CMAKE_BINARY_DIR = /home/cs1515-user/groupchat-auth-nhaseley-ywang/build
 include CMakeFiles/doc.dir/progress.make
 
 CMakeFiles/doc:
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --blue --bold --progress-dir=/home/cs1515-user/groupchat-auth-nhaseley-ywang/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Generating API documentation with Doxygen (open ./html/index.html to view)."
-	/usr/bin/doxygen /home/cs1515-user/groupchat-auth-nhaseley-ywang/build/Doxyfile &> doxygen.log
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --blue --bold --progress-dir=/home/cs1515-user/auth-yanaw02/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Generating API documentation with Doxygen (open ./html/index.html to view)."
+	/usr/bin/doxygen /home/cs1515-user/auth-yanaw02/build/Doxyfile &> doxygen.log
 
 doc: CMakeFiles/doc
 doc: CMakeFiles/doc.dir/build.make
@@ -72,6 +72,6 @@ CMakeFiles/doc.dir/clean:
 .PHONY : CMakeFiles/doc.dir/clean
 
 CMakeFiles/doc.dir/depend:
-	cd /home/cs1515-user/groupchat-auth-nhaseley-ywang/build && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/cs1515-user/groupchat-auth-nhaseley-ywang /home/cs1515-user/groupchat-auth-nhaseley-ywang /home/cs1515-user/groupchat-auth-nhaseley-ywang/build /home/cs1515-user/groupchat-auth-nhaseley-ywang/build /home/cs1515-user/groupchat-auth-nhaseley-ywang/build/CMakeFiles/doc.dir/DependInfo.cmake --color=$(COLOR)
+	cd /home/cs1515-user/auth-yanaw02/build && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/cs1515-user/auth-yanaw02 /home/cs1515-user/auth-yanaw02 /home/cs1515-user/auth-yanaw02/build /home/cs1515-user/auth-yanaw02/build /home/cs1515-user/auth-yanaw02/build/CMakeFiles/doc.dir/DependInfo.cmake --color=$(COLOR)
 .PHONY : CMakeFiles/doc.dir/depend
 

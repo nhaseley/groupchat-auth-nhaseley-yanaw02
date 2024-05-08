@@ -1,4 +1,4 @@
-# Install script for directory: /home/cs1515-user/groupchat-auth-nhaseley-ywang/test
+# Install script for directory: /home/cs1515-user/auth-yanaw02/test
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)

@@ -64,7 +64,7 @@ crypto++/nbtheory.h
 crypto++/rsa.h
 -
 
-/home/cs1515-user/groupchat-auth-nhaseley-ywang/include-shared/config.hpp
+/home/cs1515-user/auth-yanaw02/include-shared/config.hpp
 filesystem
 -
 iostream
@@ -72,7 +72,7 @@ iostream
 string
 -
 
-/home/cs1515-user/groupchat-auth-nhaseley-ywang/include-shared/logger.hpp
+/home/cs1515-user/auth-yanaw02/include-shared/logger.hpp
 string
 -
 boost/date_time/posix_time/posix_time_types.hpp
@@ -94,7 +94,7 @@ boost/log/utility/setup/console.hpp
 boost/log/utility/setup/file.hpp
 -
 
-/home/cs1515-user/groupchat-auth-nhaseley-ywang/include-shared/messages.hpp
+/home/cs1515-user/auth-yanaw02/include-shared/messages.hpp
 iostream
 -
 stdexcept
@@ -120,7 +120,7 @@ crypto++/nbtheory.h
 crypto++/rsa.h
 -
 
-/home/cs1515-user/groupchat-auth-nhaseley-ywang/include/drivers/cli_driver.hpp
+/home/cs1515-user/auth-yanaw02/include/drivers/cli_driver.hpp
 cstdlib
 -
 string
@@ -128,7 +128,7 @@ string
 sys/ioctl.h
 -
 
-/home/cs1515-user/groupchat-auth-nhaseley-ywang/include/drivers/crypto_driver.hpp
+/home/cs1515-user/auth-yanaw02/include/drivers/crypto_driver.hpp
 chrono
 -
 cmath
@@ -170,9 +170,9 @@ crypto++/rsa.h
 crypto++/sha.h
 -
 ../../include-shared/messages.hpp
-/home/cs1515-user/groupchat-auth-nhaseley-ywang/include-shared/messages.hpp
+/home/cs1515-user/auth-yanaw02/include-shared/messages.hpp
 
-/home/cs1515-user/groupchat-auth-nhaseley-ywang/include/drivers/network_driver.hpp
+/home/cs1515-user/auth-yanaw02/include/drivers/network_driver.hpp
 cstring
 -
 iostream
@@ -182,9 +182,9 @@ boost/asio.hpp
 boost/system/error_code.hpp
 -
 ../../include-shared/messages.hpp
-/home/cs1515-user/groupchat-auth-nhaseley-ywang/include-shared/messages.hpp
+/home/cs1515-user/auth-yanaw02/include-shared/messages.hpp
 
-/home/cs1515-user/groupchat-auth-nhaseley-ywang/include/pkg/user.hpp
+/home/cs1515-user/auth-yanaw02/include/pkg/user.hpp
 iostream
 -
 crypto++/cryptlib.h
@@ -200,17 +200,17 @@ crypto++/nbtheory.h
 crypto++/osrng.h
 -
 ../../include/drivers/cli_driver.hpp
-/home/cs1515-user/groupchat-auth-nhaseley-ywang/include/drivers/cli_driver.hpp
+/home/cs1515-user/auth-yanaw02/include/drivers/cli_driver.hpp
 ../../include/drivers/crypto_driver.hpp
-/home/cs1515-user/groupchat-auth-nhaseley-ywang/include/drivers/crypto_driver.hpp
+/home/cs1515-user/auth-yanaw02/include/drivers/crypto_driver.hpp
 ../../include/drivers/network_driver.hpp
-/home/cs1515-user/groupchat-auth-nhaseley-ywang/include/drivers/network_driver.hpp
+/home/cs1515-user/auth-yanaw02/include/drivers/network_driver.hpp
 config.hpp
-/home/cs1515-user/groupchat-auth-nhaseley-ywang/include/pkg/config.hpp
+/home/cs1515-user/auth-yanaw02/include/pkg/config.hpp
 keyloaders.hpp
-/home/cs1515-user/groupchat-auth-nhaseley-ywang/include/pkg/keyloaders.hpp
+/home/cs1515-user/auth-yanaw02/include/pkg/keyloaders.hpp
 
-/home/cs1515-user/groupchat-auth-nhaseley-ywang/src/cmd/user.cxx
+/home/cs1515-user/auth-yanaw02/src/cmd/user.cxx
 cmath
 -
 cstdlib
@@ -220,13 +220,13 @@ iostream
 string
 -
 ../../include-shared/config.hpp
-/home/cs1515-user/groupchat-auth-nhaseley-ywang/include-shared/config.hpp
+/home/cs1515-user/auth-yanaw02/include-shared/config.hpp
 ../../include-shared/logger.hpp
-/home/cs1515-user/groupchat-auth-nhaseley-ywang/include-shared/logger.hpp
+/home/cs1515-user/auth-yanaw02/include-shared/logger.hpp
 ../../include/drivers/crypto_driver.hpp
-/home/cs1515-user/groupchat-auth-nhaseley-ywang/include/drivers/crypto_driver.hpp
+/home/cs1515-user/auth-yanaw02/include/drivers/crypto_driver.hpp
 ../../include/drivers/network_driver.hpp
-/home/cs1515-user/groupchat-auth-nhaseley-ywang/include/drivers/network_driver.hpp
+/home/cs1515-user/auth-yanaw02/include/drivers/network_driver.hpp
 ../../include/pkg/user.hpp
-/home/cs1515-user/groupchat-auth-nhaseley-ywang/include/pkg/user.hpp
+/home/cs1515-user/auth-yanaw02/include/pkg/user.hpp
 

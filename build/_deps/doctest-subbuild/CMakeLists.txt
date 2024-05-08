@@ -12,8 +12,8 @@ project(doctest-populate NONE)
 include(ExternalProject)
 ExternalProject_Add(doctest-populate
                      "UPDATE_DISCONNECTED" "False" "GIT_REPOSITORY" "https://github.com/onqtam/doctest" "GIT_TAG" "v2.4.11"
-                    SOURCE_DIR          "/home/cs1515-user/groupchat-auth-nhaseley-ywang/build/_deps/doctest-src"
-                    BINARY_DIR          "/home/cs1515-user/groupchat-auth-nhaseley-ywang/build/_deps/doctest-build"
+                    SOURCE_DIR          "/home/cs1515-user/auth-yanaw02/build/_deps/doctest-src"
+                    BINARY_DIR          "/home/cs1515-user/auth-yanaw02/build/_deps/doctest-build"
                     CONFIGURE_COMMAND   ""
                     BUILD_COMMAND       ""
                     INSTALL_COMMAND     ""

@@ -70,7 +70,34 @@ void UserClient::run() {
   repl.add_action("listen", "listen <port>", &UserClient::HandleUser);
   repl.add_action("connect", "connect <address> <port>",
                   &UserClient::HandleUser);
+  repl.add_action("gc", "gc <address> <port>", &UserClient::HandleGCMessage);
   repl.run();
+}
+
+void UserClient::HandleGCMessage(std::string input){
+  std::vector<std::string> input_split = string_split(input, ' ');
+  if (input_split.size() != 3)
+  {
+    this->cli_driver->print_left("invalid number of arguments.");
+    return;
+  }
+  std::string address = input_split[1];
+  int port = std::stoi(input_split[2]);
+  this->network_driver->connect(address, port);
+  this->DoMessageServer();
+}
+
+void UserClient::DoMessageServer()
+{
+  auto keys = this->HandleServerKeyExchange();
+
+  this->cli_driver->init();
+  this->cli_driver->print_success("Connected!");
+
+  boost::thread msgListener =
+      boost::thread(boost::bind(&UserClient::ReceiveThread, this, keys));
+  this->SendThread(keys);
+  msgListener.join();
 }
 
 /**

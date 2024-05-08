@@ -28,6 +28,8 @@ public:
   void HandleLoginOrRegister(std::string input);
   void DoLoginOrRegister(std::string input);
   void HandleUser(std::string input);
+  void DoMessageServer();
+  void HandleGCMessage(std::string input);
 
 private:
   std::string id;
