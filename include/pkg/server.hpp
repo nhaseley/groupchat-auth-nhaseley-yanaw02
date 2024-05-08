@@ -17,6 +17,14 @@
 #include "config.hpp"
 #include "keyloaders.hpp"
 
+// struct ThreadData {
+//   int index;
+//   std::shared_ptr<NetworkDriver> network_driver;
+//   std::shared_ptr<CryptoDriver> crypto_driver;
+//   CryptoPP::SecByteBlock aes;
+//   CryptoPP::SecByteBlock hmac;
+// };
+
 class ServerClient {
 public:
   ServerClient(ServerConfig server_config);
@@ -49,13 +57,6 @@ private:
   void Reset(std::string _);
   void Users(std::string _);
 
-  void ReceiveThread(std::pair<CryptoPP::SecByteBlock, CryptoPP::SecByteBlock> keys, 
-    std::shared_ptr<NetworkDriver> network_driver,
-    std::shared_ptr<CryptoDriver> crypto_driver);
-  void SendThread(
-    std::pair<CryptoPP::SecByteBlock, CryptoPP::SecByteBlock> keys, 
-    std::shared_ptr<NetworkDriver> network_driver,
-    std::shared_ptr<CryptoDriver> crypto_driver);
-
-  std::vector<std::thread> threads;
+  std::vector<std::shared_ptr<NetworkDriver>> threads;
+  std::mutex mtx;
 };

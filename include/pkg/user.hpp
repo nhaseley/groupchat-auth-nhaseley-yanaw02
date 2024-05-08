@@ -28,7 +28,7 @@ public:
   void HandleLoginOrRegister(std::string input);
   void DoLoginOrRegister(std::string input);
   void HandleUser(std::string input);
-  void DoMessageServer();
+  void DoMessageGC();
   void HandleGCMessage(std::string input);
 
 private:
@@ -48,6 +48,8 @@ private:
 
   void
   ReceiveThread(std::pair<CryptoPP::SecByteBlock, CryptoPP::SecByteBlock> keys);
+  void
+  ReceiveRawThread();
   void
   SendThread(std::pair<CryptoPP::SecByteBlock, CryptoPP::SecByteBlock> keys);
 };

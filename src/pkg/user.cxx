@@ -84,10 +84,10 @@ void UserClient::HandleGCMessage(std::string input){
   std::string address = input_split[1];
   int port = std::stoi(input_split[2]);
   this->network_driver->connect(address, port);
-  this->DoMessageServer();
+  this->DoMessageGC();
 }
 
-void UserClient::DoMessageServer()
+void UserClient::DoMessageGC()
 {
   auto keys = this->HandleServerKeyExchange();
 
@@ -95,9 +95,28 @@ void UserClient::DoMessageServer()
   this->cli_driver->print_success("Connected!");
 
   boost::thread msgListener =
-      boost::thread(boost::bind(&UserClient::ReceiveThread, this, keys));
+      boost::thread(boost::bind(&UserClient::ReceiveRawThread, this));
   this->SendThread(keys);
   msgListener.join();
+}
+
+/**
+ * ReceiveThread but does not check with keys.
+ * Unsafe. Only okay because the messages will be encrypted prior to sending them to the server.
+ */
+void UserClient::ReceiveRawThread() {
+  while (true) {
+    std::vector<unsigned char> encrypted_msg_data;
+    try {
+      encrypted_msg_data = this->network_driver->read();
+    } catch (std::runtime_error &_) {
+      this->cli_driver->print_info("Received EOF; closing connection.");
+      return;
+    }
+    UserToUser_Message_Message u2u_msg;
+    u2u_msg.deserialize(encrypted_msg_data);
+    this->cli_driver->print_left(u2u_msg.msg);
+  }
 }
 
 /**
@@ -452,9 +471,10 @@ void UserClient::ReceiveThread(
       throw std::runtime_error("User sent message with invalid MAC.");
     }
 
-    // Decrypt and print.
+    // // Decrypt and print.
     UserToUser_Message_Message u2u_msg;
-    u2u_msg.deserialize(msg_data.first);
+    // u2u_msg.deserialize(msg_data.first);
+    u2u_msg.deserialize(encrypted_msg_data);
     this->cli_driver->print_left(u2u_msg.msg);
   }
 }
