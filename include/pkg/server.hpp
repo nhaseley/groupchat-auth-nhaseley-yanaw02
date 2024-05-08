@@ -52,7 +52,10 @@ private:
 
   CryptoPP::RSA::PrivateKey RSA_signing_key;
   CryptoPP::RSA::PublicKey RSA_verification_key;
-
+  std::vector<std::tuple<SecByteBlock, std::string>> all_users_pk;
+  
+  void GenerateGCKey(std::shared_ptr<NetworkDriver> network_driver,
+    std::shared_ptr<CryptoDriver> crypto_driver, std::pair<CryptoPP::SecByteBlock, CryptoPP::SecByteBlock> keys);
   void ListenForConnections(int port);
   void Reset(std::string _);
   void Users(std::string _);

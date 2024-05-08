@@ -192,6 +192,31 @@ int UserToServer_DHPublicValue_Message::deserialize(
   return n;
 }
 
+
+/**
+ * Serialize UserToServer_GC_DHPublicValue_Message.
+ */
+void UserToServer_GC_DHPublicValue_Message::serialize(std::vector<unsigned char> &data) {
+  std::string whoFrom = std::get<1>(key_and_from_who);
+  size_t whoFromSize = whoFrom.size();
+  std::memcpy(&whoFromSize, &whoFrom[0], sizeof(size_t));
+  data.insert(data.end(), &whoFromSize, &whoFromSize + sizeof(size_t));
+  data.insert(data.end(), whoFrom.begin(), whoFrom.end());
+}
+
+/**
+ * Deserialize UserToServer_GC_DHPublicValue_Message.
+ */
+int UserToServer_GC_DHPublicValue_Message::deserialize(std::vector<unsigned char> &data) {
+  size_t whoFromSize;
+  std::memcpy(&whoFromSize, &data[0], sizeof(size_t));
+  std::string whoFrom(data.begin() + sizeof(size_t), data.begin() + sizeof(size_t) + whoFromSize);
+  key_and_from_who = std::make_tuple(CryptoPP::SecByteBlock(), whoFrom);
+  data.erase(data.begin(), data.begin() + sizeof(size_t) + whoFromSize);
+
+  return 0; // Successful deserialization.
+}
+
 /**
  * serialize ServerToUser_DHPublicValue_Message.
  */
@@ -232,6 +257,54 @@ int ServerToUser_DHPublicValue_Message::deserialize(
   n += get_string(&this->server_signature, data, n);
   return n;
 }
+
+/**
+ * Serialize ServerToUser_GC_DHPublicValue_Message.
+ */
+void ServerToUser_GC_DHPublicValue_Message::serialize(std::vector<unsigned char> &data) {
+  size_t vectorSize = other_users_pk.size();
+  data.insert(data.end(), reinterpret_cast<const unsigned char*>(&vectorSize),
+                    reinterpret_cast<const unsigned char*>(&vectorSize) + sizeof(size_t));
+        
+  // Serialize each tuple in the vector
+  for (const auto &tuple : other_users_pk) {
+    const std::string& whoFrom = std::get<1>(tuple);
+    size_t whoFromSize = whoFrom.size();
+            
+    // Copy size of whoFrom into data
+    data.insert(data.end(), reinterpret_cast<const unsigned char*>(&whoFromSize),
+                        reinterpret_cast<const unsigned char*>(&whoFromSize) + sizeof(size_t));
+            
+    // Copy whoFrom into data
+    data.insert(data.end(), whoFrom.begin(), whoFrom.end());
+  }
+}
+
+/**
+ * Deserialize ServerToUser_GC_DHPublicValue_Message.
+ */
+int ServerToUser_GC_DHPublicValue_Message::deserialize(std::vector<unsigned char> &data) {
+  // Deserialize the size of the vector
+  size_t vectorSize;
+  std::memcpy(&vectorSize, &data[0], sizeof(size_t));
+  data.erase(data.begin(), data.begin() + sizeof(size_t));
+
+  // Deserialize each tuple in the vector
+  for (size_t i = 0; i < vectorSize; ++i) {
+    size_t whoFromSize;
+    std::memcpy(&whoFromSize, &data[0], sizeof(size_t));
+    data.erase(data.begin(), data.begin() + sizeof(size_t));
+
+    // Extract whoFrom from data
+    std::string whoFrom(data.begin(), data.begin() + whoFromSize);
+    data.erase(data.begin(), data.begin() + whoFromSize);
+
+    // Emplace tuple into other_users_pk
+    other_users_pk.emplace_back(CryptoPP::SecByteBlock(), whoFrom);
+  }
+  return 0; // Successful deserialization
+}
+
 
 /**
  * serialize UserToServer_IDPrompt_Message.

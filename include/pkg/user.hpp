@@ -30,6 +30,7 @@ public:
   void HandleUser(std::string input);
   void DoMessageGC();
   void HandleGCMessage(std::string input);
+  CryptoPP::SecByteBlock GenerateGCKey(bool is_admin, std::pair<CryptoPP::SecByteBlock, CryptoPP::SecByteBlock> keys);
 
 private:
   std::string id;

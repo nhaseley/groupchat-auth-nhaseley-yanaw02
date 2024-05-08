@@ -130,6 +130,61 @@ bool ServerClient::HandleGCConnection(
 }
 
 /**
+* Function to do server's generate group chat key work, should be called for each thread with user
+* AKA
+* 1. Get g^a from User A and
+* 2. send to users B and C
+* 
+* OR 
+*
+* 1. Get g^b from User B and
+* 2. send to user A (and B but not really necessary)
+* 
+* OR
+*
+* 1. Get g^c from User C and 
+* 2. send to user A (and B but not really necessary)
+
+*/
+void ServerClient::GenerateGCKey(std::shared_ptr<NetworkDriver> network_driver,
+    std::shared_ptr<CryptoDriver> crypto_driver, std::pair<CryptoPP::SecByteBlock, CryptoPP::SecByteBlock> keys){
+    
+    // Step 1
+    UserToServer_GC_DHPublicValue_Message User_Server_GC_PK_Msg;    
+    std::vector<unsigned char> pk_data = network_driver->read();
+    auto dec_vrfy_pk_data = crypto_driver->decrypt_and_verify(std::get<0>(keys), std::get<1>(keys), pk_data);
+    if (std::get<1>(dec_vrfy_pk_data) == false){
+      std::cout << "Server could not decrypt/verify UserToServer_GC_DHPublicValue_Message" << std::endl;
+      network_driver->disconnect();
+      throw std::runtime_error("Server could not decrypt/verify UserToServer_GC_DHPublicValue_Message");
+    }
+    User_Server_GC_PK_Msg.deserialize(std::get<0>(dec_vrfy_pk_data));
+    std::tuple<SecByteBlock, std::string> key_and_from_who = User_Server_GC_PK_Msg.key_and_from_who; // ex. (A, g^a)
+    this->all_users_pk.push_back(key_and_from_who); 
+
+    // Step 2
+    // Create a copy of all_users_pk with only the users that do not match correct id
+    std::vector<std::tuple<SecByteBlock, std::string>> other_users_pk;
+    std::string my_id = std::get<1>(key_and_from_who);
+    std::copy_if(all_users_pk.begin(), all_users_pk.end(), std::back_inserter(other_users_pk),
+        [&my_id](const auto& pk_and_user) { return std::get<1>(pk_and_user) != my_id; });
+
+    ServerToUser_GC_DHPublicValue_Message Server_GC_PK_Msg;
+    for (const auto& pk_and_user : other_users_pk) {
+      std::cout << "PK: " << byteblock_to_string(std::get<0>(pk_and_user)) << std::endl;
+      std::cout << "User ID: " << std::get<1>(pk_and_user) << std::endl;
+
+      Server_GC_PK_Msg.other_users_pk.push_back(pk_and_user);
+    }
+    
+    std::vector<unsigned char> Server_GC_PK_Data;
+    Server_GC_PK_Msg.serialize(Server_GC_PK_Data);
+    network_driver->send(Server_GC_PK_Data);
+
+}
+
+
+/**
  * Handle keygen and handle either logins or registrations. This function
  * should: 1) Handle key exchange with the user.
  * 2) Reads a UserToServer_IDPrompt_Message and determines whether the user is

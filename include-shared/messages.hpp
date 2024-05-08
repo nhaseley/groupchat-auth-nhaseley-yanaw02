@@ -33,6 +33,8 @@ enum T {
   ServerToUser_IssuedCertificate_Message = 10,
   UserToUser_DHPublicValue_Message = 11,
   UserToUser_Message_Message = 12,
+  UserToServer_GC_DHPublicValue_Message = 13,
+  ServerToUser_GC_DHPublicValue_Message = 14,
 };
 };
 MessageType::T get_message_type(std::vector<unsigned char> &data);
@@ -94,6 +96,20 @@ struct ServerToUser_DHPublicValue_Message : public Serializable {
   CryptoPP::SecByteBlock server_public_value;
   CryptoPP::SecByteBlock user_public_value;
   std::string server_signature; // computed on server_value + user_value
+
+  void serialize(std::vector<unsigned char> &data);
+  int deserialize(std::vector<unsigned char> &data);
+};
+
+struct UserToServer_GC_DHPublicValue_Message : public Serializable {
+  std::tuple<CryptoPP::SecByteBlock, std::string> key_and_from_who;  // ex. (A, g^a)
+ 
+  void serialize(std::vector<unsigned char> &data);
+  int deserialize(std::vector<unsigned char> &data);
+};
+
+struct ServerToUser_GC_DHPublicValue_Message : public Serializable {
+  std::vector<std::tuple<CryptoPP::SecByteBlock, std::string>> other_users_pk; // [ (B, g^b), (C, g^c) ]
 
   void serialize(std::vector<unsigned char> &data);
   int deserialize(std::vector<unsigned char> &data);
