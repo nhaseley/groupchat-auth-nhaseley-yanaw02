@@ -101,20 +101,22 @@ void UserClient::DoMessageGC(bool is_admin)
   this->cli_driver->init();
   this->cli_driver->print_success("Connected!");
 
+  SecByteBlock gc_aes = this->crypto_driver->AES_generate_key(gc_key);
+  SecByteBlock gc_hmac = this->crypto_driver->HMAC_generate_key(gc_key);
+  auto gc_keys = std::make_pair(gc_aes, gc_hmac);
+
   boost::thread msgListener =
-      boost::thread(boost::bind(&UserClient::ReceiveRawThread, this));
-  
-  // *SOME ENCRYPT MESSAGE BEFORE SENDING MESSAGE* //
-  // std::cout << "SENDING FROM USER: " << plaintext << std::endl;
-  this->SendThread(server_keys);
+      boost::thread(boost::bind(&UserClient::ReceiveGCThread, this, gc_keys));
+  this->SendGCThread(gc_keys);
   msgListener.join();
 }
 
 /**
+ * Listen for messages from groupchat and print to CLI.
  * ReceiveThread but does not check with keys.
  * Unsafe. Only okay because the messages will be encrypted prior to sending them to the server.
  */
-void UserClient::ReceiveRawThread() {
+void UserClient::ReceiveGCThread(std::pair<CryptoPP::SecByteBlock, CryptoPP::SecByteBlock> gc_keys) {
   while (true) {
     std::vector<unsigned char> encrypted_msg_data;
     try {
@@ -124,14 +126,50 @@ void UserClient::ReceiveRawThread() {
       return;
     }
 
+    auto msg_data = this->crypto_driver->decrypt_and_verify(
+        gc_keys.first, gc_keys.second, encrypted_msg_data);
+    if (!msg_data.second) {
+      this->cli_driver->print_warning(
+          "Invalid MAC on message; closing connection.");
+      this->network_driver->disconnect();
+      throw std::runtime_error("User sent message with invalid MAC.");
+    }
+
     UserToUser_Message_Message u2u_msg;
 
-    u2u_msg.deserialize(encrypted_msg_data);
-    // std::cout << "MESSAGE: " <<  u2u_msg.msg << std::endl;
-    // *SOME DECRYPT MESSAGE IN ORDER TO SEND MESSAGE* //
+    u2u_msg.deserialize(msg_data.first);
     this->cli_driver->print_left(u2u_msg.msg);
   }
 }
+
+/**
+ * Listen for stdin and send to other parties in the groupchat.
+ */
+void UserClient::SendGCThread(
+    std::pair<CryptoPP::SecByteBlock, CryptoPP::SecByteBlock> gc_keys) {
+  std::string plaintext;
+  while (std::getline(std::cin, plaintext)) {
+    // Read from STDIN.
+    if (plaintext != "") {
+      UserToUser_Message_Message u2u_msg;
+      u2u_msg.msg = plaintext;
+      std::vector<unsigned char> msg_data = this->crypto_driver->encrypt_and_tag(gc_keys.first, gc_keys.second, &u2u_msg);
+
+      try {
+        this->network_driver->send(msg_data);
+      } catch (std::runtime_error &_) {
+        this->cli_driver->print_info(
+            "Other side is closed, closing connection");
+        this->network_driver->disconnect();
+        return;
+      }
+    }
+    this->cli_driver->print_right(plaintext);
+  }
+  this->cli_driver->print_info("Received EOF from user; closing connection");
+  this->network_driver->disconnect();
+}
+
 
 /**
 * Function to do server's generate group chat key work, should be called for each thread with user
@@ -656,8 +694,7 @@ void UserClient::ReceiveThread(
 
     // // Decrypt and print.
     UserToUser_Message_Message u2u_msg;
-    // u2u_msg.deserialize(msg_data.first);
-    u2u_msg.deserialize(encrypted_msg_data);
+    u2u_msg.deserialize(msg_data.first);
     this->cli_driver->print_left(u2u_msg.msg);
   }
 }

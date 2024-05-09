@@ -49,8 +49,10 @@ private:
 
   void
   ReceiveThread(std::pair<CryptoPP::SecByteBlock, CryptoPP::SecByteBlock> keys);
-  void
-  ReceiveRawThread();
+  void ReceiveGCThread(std::pair<CryptoPP::SecByteBlock, CryptoPP::SecByteBlock> gc_keys);
   void
   SendThread(std::pair<CryptoPP::SecByteBlock, CryptoPP::SecByteBlock> keys);
+  void
+  SendGCThread(
+    std::pair<CryptoPP::SecByteBlock, CryptoPP::SecByteBlock> gc_keys);
 };

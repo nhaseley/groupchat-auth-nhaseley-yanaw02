@@ -109,6 +109,15 @@ void ServerClient::ListenForConnections(int port) {
   }
 }
 
+/**
+ * Handle keygen and handle communication between the groupchat. This function
+ * should: 
+ * 1) Handle key exchange with the user.
+ * 2) Initiates communication to generate a shared Groupchat key between users in the groupchat
+ *  Waits to do so until all users have generated their own public keys and updated all_users_pk vector
+*  3) Constantly listening for messages from the user on each thread
+ * 4) Disconnect the network_driver, then return true.
+ */
 bool ServerClient::HandleGCConnection(
   std::shared_ptr<NetworkDriver> network_driver,
   std::shared_ptr<CryptoDriver> crypto_driver, int index){
@@ -127,16 +136,17 @@ bool ServerClient::HandleGCConnection(
   GenerateGCKey(network_driver, crypto_driver, server_keys, my_id, index); 
 
   while(1){
-    auto data = crypto_driver->decrypt_and_verify(server_keys.first, server_keys.second, network_driver->read());
-    if (!data.second){
-      throw std::runtime_error("Invalid message");
-    }
-  
-    SendToAll(data.first, index);
+    std::vector<unsigned char> data = network_driver->read();
+    SendToAll(data, index);
   }
+  network_driver->disconnect();
   return true;
 }
 
+/**
+ * Sending messages to all threads except the one that matches an 
+ * input index in indexes local variable
+ */
 void ServerClient::SendToAll(std::vector<unsigned char> data, int index){
   for (int i = 0; i < this->threads.size(); i++){
       if (i == index) continue;
