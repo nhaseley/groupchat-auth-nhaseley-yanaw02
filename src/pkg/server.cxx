@@ -203,7 +203,10 @@ std::string ServerClient::GetKeys(
 *
 * 1. Get g^c from User C and 
 * 2. send to user A (and B but not really necessary)
-
+* 
+* 3. If we are speaking to the admin, receive the encrypted R message and 
+* distribute it to all other users in the groupchat
+*
 */
 void ServerClient::GenerateGCKey(std::shared_ptr<NetworkDriver> network_driver,
     std::shared_ptr<CryptoDriver> crypto_driver, std::pair<CryptoPP::SecByteBlock, CryptoPP::SecByteBlock> server_keys, std::string my_id, int index){
