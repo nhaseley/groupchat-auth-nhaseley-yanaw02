@@ -383,83 +383,58 @@ int ServerToUser_GC_DHPublicValue_Message::deserialize(std::vector<unsigned char
  * Serialize UserToServer_GC_AdminPublicValue_Message. TODO: some repeated code for these 2 messages below
  */
 void UserToServer_GC_AdminPublicValue_Message::serialize(std::vector<unsigned char> &data) {
-    // Serialize pk_with_admin
-    size_t pkSize = pk_with_admin.size();
-    data.insert(data.end(), pk_with_admin.begin(), pk_with_admin.end());
-    // Serialize R_iv
-    size_t ivSize = R_iv.size();
-    data.insert(data.end(), R_iv.begin(), R_iv.end());
-    // Serialize R_ciphertext
-    size_t ciphertextSize = R_ciphertext.size();
-    data.insert(data.end(), R_ciphertext.begin(), R_ciphertext.end());
-    // Serialize who_key_with
-    size_t whoKeyWithSize = who_key_with.size();
-    data.insert(data.end(), who_key_with.begin(), who_key_with.end());
-    // Insert sizes of components
-    data.push_back(static_cast<unsigned char>((pkSize >> 8) & 0xFF));
-    data.push_back(static_cast<unsigned char>(pkSize & 0xFF));
-    data.push_back(static_cast<unsigned char>((ivSize >> 8) & 0xFF));
-    data.push_back(static_cast<unsigned char>(ivSize & 0xFF));
-    data.push_back(static_cast<unsigned char>((ciphertextSize >> 8) & 0xFF));
-    data.push_back(static_cast<unsigned char>(ciphertextSize & 0xFF));
-    data.push_back(static_cast<unsigned char>((whoKeyWithSize >> 8) & 0xFF));
-    data.push_back(static_cast<unsigned char>(whoKeyWithSize & 0xFF));
+    // Add message type.
+    data.push_back((char)MessageType::UserToServer_GC_AdminPublicValue_Message);
+
+    // Add fields.
+    std::string pk_with_admin_string = byteblock_to_string(this->pk_with_admin);
+    put_string(pk_with_admin_string, data);
+
+    std::string R_iv_string = byteblock_to_string(this->R_iv);
+    put_string(R_iv_string, data);
+
+    put_string(this->R_ciphertext, data);
+    put_string(this->who_key_with, data);
 }
 
 /**
  * Deserialize UserToServer_GC_AdminPublicValue_Message.
  */
 int UserToServer_GC_AdminPublicValue_Message::deserialize(std::vector<unsigned char> &data) {
-    size_t offset = 0;
-    // Deserialize pk_with_admin
-    size_t pkSize = (data[offset] << 8) + data[offset + 1];
-    pk_with_admin.resize(pkSize);
-    std::copy(data.begin() + offset + 2, data.begin() + offset + 2 + pkSize, pk_with_admin.begin());
-    offset += pkSize + 2;
-    // Deserialize R_iv
-    size_t ivSize = (data[offset] << 8) + data[offset + 1];
-    R_iv.resize(ivSize);
-    std::copy(data.begin() + offset + 2, data.begin() + offset + 2 + ivSize, R_iv.begin());
-    offset += ivSize + 2;
-    // Deserialize R_ciphertext
-    size_t ciphertextSize = (data[offset] << 8) + data[offset + 1];
-    R_ciphertext.resize(ciphertextSize);
-    std::copy(data.begin() + offset + 2, data.begin() + offset + 2 + ciphertextSize, R_ciphertext.begin());
-    offset += ciphertextSize + 2;
-    // Deserialize who_key_with
-    size_t whoKeyWithSize = (data[offset] << 8) + data[offset + 1];
-    who_key_with.resize(whoKeyWithSize);
-    std::copy(data.begin() + offset + 2, data.begin() + offset + 2 + whoKeyWithSize, who_key_with.begin());
-    offset += whoKeyWithSize + 2;
-    // Return offset
-    return offset;
+  // Check correct message type.
+  assert(data[0] == MessageType::UserToServer_GC_AdminPublicValue_Message);
+
+  // Get fields.
+  int n = 1;
+  std::string pk_with_admin_string;
+  n += get_string(&pk_with_admin_string, data, n);
+  this->pk_with_admin = string_to_byteblock(pk_with_admin_string);
+
+  std::string R_iv_string;
+  n += get_string(&R_iv_string, data, n);
+  this->R_iv = string_to_byteblock(R_iv_string);
+
+  n += get_string(&this->R_ciphertext, data, n);
+  n += get_string(&this->who_key_with, data, n);
+  return n;
 }
 
 /**
  * Serialize ServerToUser_GC_AdminPublicValue_Message.
  */
 void ServerToUser_GC_AdminPublicValue_Message::serialize(std::vector<unsigned char> &data) {
-    // Serialize pk_with_admin
-    size_t pkSize = pk_with_admin.size();
-    data.insert(data.end(), pk_with_admin.begin(), pk_with_admin.end());
-    // Serialize R_iv
-    size_t ivSize = R_iv.size();
-    data.insert(data.end(), R_iv.begin(), R_iv.end());
-    // Serialize R_ciphertext
-    size_t ciphertextSize = R_ciphertext.size();
-    data.insert(data.end(), R_ciphertext.begin(), R_ciphertext.end());
-    // Serialize who_key_with
-    size_t whoKeyWithSize = who_key_with.size();
-    data.insert(data.end(), who_key_with.begin(), who_key_with.end());
-    // Insert sizes of components
-    data.push_back(static_cast<unsigned char>((pkSize >> 8) & 0xFF));
-    data.push_back(static_cast<unsigned char>(pkSize & 0xFF));
-    data.push_back(static_cast<unsigned char>((ivSize >> 8) & 0xFF));
-    data.push_back(static_cast<unsigned char>(ivSize & 0xFF));
-    data.push_back(static_cast<unsigned char>((ciphertextSize >> 8) & 0xFF));
-    data.push_back(static_cast<unsigned char>(ciphertextSize & 0xFF));
-    data.push_back(static_cast<unsigned char>((whoKeyWithSize >> 8) & 0xFF));
-    data.push_back(static_cast<unsigned char>(whoKeyWithSize & 0xFF));
+  // Add message type.
+  data.push_back((char)MessageType::ServerToUser_GC_AdminPublicValue_Message);
+
+  // Add fields.
+  std::string pk_with_admin_string = byteblock_to_string(this->pk_with_admin);
+  put_string(pk_with_admin_string, data);
+
+  std::string R_iv_string = byteblock_to_string(this->R_iv);
+  put_string(R_iv_string, data);
+
+  put_string(this->R_ciphertext, data);
+  put_string(this->who_key_with, data);
     
 }
 
@@ -467,29 +442,22 @@ void ServerToUser_GC_AdminPublicValue_Message::serialize(std::vector<unsigned ch
  * Deserialize ServerToUser_GC_AdminPublicValue_Message.
  */
 int ServerToUser_GC_AdminPublicValue_Message::deserialize(std::vector<unsigned char> &data) {
-    size_t offset = 0;
-    // Deserialize pk_with_admin
-    size_t pkSize = (data[offset] << 8) + data[offset + 1];
-    pk_with_admin.resize(pkSize);
-    std::copy(data.begin() + offset + 2, data.begin() + offset + 2 + pkSize, pk_with_admin.begin());
-    offset += pkSize + 2;
-    // Deserialize R_iv
-    size_t ivSize = (data[offset] << 8) + data[offset + 1];
-    R_iv.resize(ivSize);
-    std::copy(data.begin() + offset + 2, data.begin() + offset + 2 + ivSize, R_iv.begin());
-    offset += ivSize + 2;
-    // Deserialize R_ciphertext
-    size_t ciphertextSize = (data[offset] << 8) + data[offset + 1];
-    R_ciphertext.resize(ciphertextSize);
-    std::copy(data.begin() + offset + 2, data.begin() + offset + 2 + ciphertextSize, R_ciphertext.begin());
-    offset += ciphertextSize + 2;
-    // Deserialize who_key_with
-    size_t whoKeyWithSize = (data[offset] << 8) + data[offset + 1];
-    who_key_with.resize(whoKeyWithSize);
-    std::copy(data.begin() + offset + 2, data.begin() + offset + 2 + whoKeyWithSize, who_key_with.begin());
-    offset += whoKeyWithSize + 2;
-    // Return offset
-    return offset;
+  // Check correct message type.
+  assert(data[0] == MessageType::ServerToUser_GC_AdminPublicValue_Message);
+
+  // Get fields.
+  int n = 1;
+  std::string pk_with_admin_string;
+  n += get_string(&pk_with_admin_string, data, n);
+  this->pk_with_admin = string_to_byteblock(pk_with_admin_string);
+
+  std::string R_iv_string;
+  n += get_string(&R_iv_string, data, n);
+  this->R_iv = string_to_byteblock(R_iv_string);
+
+  n += get_string(&this->R_ciphertext, data, n);
+  n += get_string(&this->who_key_with, data, n);
+  return n;
 }
 
 /**

@@ -35,6 +35,8 @@ enum T {
   UserToUser_Message_Message = 12,
   UserToServer_GC_DHPublicValue_Message = 13,
   ServerToUser_GC_DHPublicValue_Message = 14,
+  UserToServer_GC_AdminPublicValue_Message= 15,
+  ServerToUser_GC_AdminPublicValue_Message=16,
 
 };
 };
