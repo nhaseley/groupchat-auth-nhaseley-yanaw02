@@ -70,33 +70,43 @@ void UserClient::run() {
   repl.add_action("listen", "listen <port>", &UserClient::HandleUser);
   repl.add_action("connect", "connect <address> <port>",
                   &UserClient::HandleUser);
-  repl.add_action("gc", "gc <address> <port>", &UserClient::HandleGCMessage);
+  repl.add_action("gc", "gc <address> <port> <admin/user>", &UserClient::HandleGCMessage);
   repl.run();
 }
 
 void UserClient::HandleGCMessage(std::string input){
   std::vector<std::string> input_split = string_split(input, ' ');
-  if (input_split.size() != 3)
+  if (input_split.size() != 4)
   {
     this->cli_driver->print_left("invalid number of arguments.");
     return;
   }
   std::string address = input_split[1];
   int port = std::stoi(input_split[2]);
+  bool is_admin = (input_split[3] == "admin");
   this->network_driver->connect(address, port);
-  this->DoMessageGC();
+  this->DoMessageGC(is_admin);
 }
 
-void UserClient::DoMessageGC()
+void UserClient::DoMessageGC(bool is_admin)
 {
-  auto keys = this->HandleServerKeyExchange();
+  auto server_keys = this->HandleServerKeyExchange();
+  // if (this->id == ''){
+  //   this->cli_driver->print_left("You must first login.");
+  // }
+  this->id = this->user_config.user_username;
 
+  CryptoPP::SecByteBlock gc_key = this->GenerateGCKey(is_admin, server_keys);
+  std::cout << "GC KEY FINAL: " << byteblock_to_string(gc_key) << std::endl;
   this->cli_driver->init();
   this->cli_driver->print_success("Connected!");
 
   boost::thread msgListener =
       boost::thread(boost::bind(&UserClient::ReceiveRawThread, this));
-  this->SendThread(keys);
+  
+  // *SOME ENCRYPT MESSAGE BEFORE SENDING MESSAGE* //
+  // std::cout << "SENDING FROM USER: " << plaintext << std::endl;
+  this->SendThread(server_keys);
   msgListener.join();
 }
 
@@ -115,6 +125,8 @@ void UserClient::ReceiveRawThread() {
     }
     UserToUser_Message_Message u2u_msg;
     u2u_msg.deserialize(encrypted_msg_data);
+    std::cout << "MESSAGE: " <<  u2u_msg.msg << std::endl;
+    // *SOME DECRYPT MESSAGE IN ORDER TO SEND MESSAGE* //
     this->cli_driver->print_left(u2u_msg.msg);
   }
 }
@@ -140,22 +152,32 @@ void UserClient::ReceiveRawThread() {
 */
 CryptoPP::SecByteBlock UserClient::GenerateGCKey(bool is_admin, std::pair<CryptoPP::SecByteBlock, CryptoPP::SecByteBlock> keys){
   // Step 1
+  std::cout << "ENTERING GenerateGCKey" << std::endl;
+  SecByteBlock AESKey = std::get<0>(keys);
+  SecByteBlock HMACKey =  std::get<1>(keys);
   CryptoPP::Integer p = DL_P;
   CryptoPP::Integer q = DL_Q; // TODO: check about bounds?
   std::tuple<DH, SecByteBlock, SecByteBlock> initializedParams = this->crypto_driver->DH_initialize();
   DH DH_obj = std::get<0>(initializedParams);
   SecByteBlock DH_private_value = std::get<1>(initializedParams);
   SecByteBlock DH_public_value = std::get<2>(initializedParams);
-
-  std::tuple<SecByteBlock, std::string> key_and_from_who = std::make_tuple(DH_public_value, this->id);
+  std::cout << "USER: " << this->id << std::endl;
+  // std::tuple<SecByteBlock, std::string> key_and_from_who = std::make_tuple(DH_public_value, this->id);
   UserToServer_GC_DHPublicValue_Message User_GC_PK_Msg;
-  User_GC_PK_Msg.key_and_from_who = key_and_from_who;
-  std::vector<unsigned char> User_GC_PK_Data;
-  User_GC_PK_Msg.serialize(User_GC_PK_Data);
-  network_driver->send(User_GC_PK_Data);
+  // User_GC_PK_Msg.key_and_from_who = key_and_from_who;
+  User_GC_PK_Msg.key = DH_public_value;
+  User_GC_PK_Msg.from_who = this->id;
+  User_GC_PK_Msg.is_admin = is_admin;
+
+  std::vector<unsigned char> User_GC_PK_Data = crypto_driver->encrypt_and_tag(AESKey, HMACKey, &User_GC_PK_Msg);
+  this->network_driver->send(User_GC_PK_Data);
+
+  std::cout << "Sent Public Key to server: " << byteblock_to_string(DH_public_value) << std::endl;
+  std::cout << "Sent Public Key to server from: " << this->id << std::endl;
 
   // Step 2
-  ServerToUser_GC_DHPublicValue_Message Server_User_GC_PK_Msg;    
+  ServerToUser_GC_DHPublicValue_Message Server_User_GC_PK_Msg;  
+  std::cout << "ABOUT TO READ SERVER's PK MESSAGE" << std::endl;  
   std::vector<unsigned char> all_pk_data = network_driver->read();
   auto dec_vrfy_all_pk_data = crypto_driver->decrypt_and_verify(std::get<0>(keys), std::get<1>(keys), all_pk_data);
   if (std::get<1>(dec_vrfy_all_pk_data) == false){
@@ -165,31 +187,35 @@ CryptoPP::SecByteBlock UserClient::GenerateGCKey(bool is_admin, std::pair<Crypto
   }
   Server_User_GC_PK_Msg.deserialize(std::get<0>(dec_vrfy_all_pk_data));
   std::vector<std::tuple<CryptoPP::SecByteBlock, std::string>> other_users_pk = Server_User_GC_PK_Msg.other_users_pk; // ex. (A, g^a)
-  // this->all_users_pk = other_users_pk; 
+  std::cout << "Reading other pks from server, size: " << other_users_pk.size() << std::endl;
 
   // Step 3
   std::string my_id = this->id;
   std::vector<std::tuple<SecByteBlock, std::string>> my_users_pk;
   std::copy_if(other_users_pk.begin(), other_users_pk.end(), std::back_inserter(my_users_pk),
     [&my_id](const auto& pk_and_user) { return std::get<1>(pk_and_user) != my_id; });
-
-  ServerToUser_GC_DHPublicValue_Message Server_GC_PK_Updated_Msg;
+  if (my_users_pk.size() <= 1){
+    std::print_warning("NO OTHER USERS CONNECTING, users other than me: ", my_users_pk.size());
+  }
+   std::vector<std::tuple<SecByteBlock, std::string>> other_users_updated_pk; // ex. (B, g^ab), (C, g^ac)
   for (const auto& pk_and_user : my_users_pk) {
-    std::cout << "PK: " << byteblock_to_string(std::get<0>(pk_and_user)) << std::endl;
-    std::cout << "User ID: " << std::get<1>(pk_and_user) << std::endl;
+    CryptoPP::SecByteBlock key = std::get<0>(pk_and_user);
+    std::string id = std::get<1>(pk_and_user);
+    std::cout << "PK: " << byteblock_to_string(key) << std::endl;
+    std::cout << "User ID: " << id << std::endl;
 
-    CryptoPP::Integer pk_int = byteblock_to_integer(std::get<0>(pk_and_user));
+    CryptoPP::Integer pk_int = byteblock_to_integer(key);
     CryptoPP::Integer priv_val_int = byteblock_to_integer(DH_private_value);
     // Generate g^ab = (g^b)^a
     
     CryptoPP::SecByteBlock updated_key = integer_to_byteblock(CryptoPP::ModularExponentiation(pk_int, priv_val_int, p));
-    std::tuple<SecByteBlock, std::string> updated_pk_and_user = std::make_tuple(updated_key, my_id);
+    std::cout << "Updated key: " << byteblock_to_integer(updated_key) << std::endl;
 
-    Server_GC_PK_Updated_Msg.other_users_pk.push_back(updated_pk_and_user);
+    std::string new_id = id+my_id;
+    std::tuple<SecByteBlock, std::string> updated_pk_and_user = std::make_tuple(updated_key, new_id);
+
+    other_users_updated_pk.push_back(updated_pk_and_user);
   }
-  std::vector<unsigned char> Server_GC_PK_Updated_Data;
-  Server_GC_PK_Updated_Msg.serialize(Server_GC_PK_Updated_Data);
-  network_driver->send(Server_GC_PK_Updated_Data);
 
   // Step 4
   CryptoPP::Integer R;
@@ -197,28 +223,86 @@ CryptoPP::SecByteBlock UserClient::GenerateGCKey(bool is_admin, std::pair<Crypto
     CryptoPP::AutoSeededRandomPool prng;
     R = CryptoPP::Integer(prng, 2, q - 1);
     
-    ServerToUser_GC_DHPublicValue_Message Server_GC_PK_Encrypted_Msg;
-    for (const auto& updated_pk_and_user : Server_GC_PK_Updated_Msg.other_users_pk) { // [g^ab, g^ac]
-      std::cout << "PK: " << byteblock_to_string(std::get<0>(updated_pk_and_user)) << std::endl;
-      std::cout << "User ID: " << std::get<1>(updated_pk_and_user) << std::endl;
+    UserToServer_GC_AdminPublicValue_Message User_GC_AdminPublicValue_Msg;
+    for (const auto& updated_pk_and_user : other_users_updated_pk) { // [g^ab, g^ac]
+      SecByteBlock updated_pk = std::get<0>(updated_pk_and_user);
+      std::string who_key_with = std::get<1>(updated_pk_and_user);
+      std::cout << "UPDATED PK: " << byteblock_to_string(updated_pk) << std::endl;
+      std::cout << "User ID: " << who_key_with << std::endl;
+      
+      // Encrypt R with each updated_pk
+      // ciphertext, iv TODO: FIX ENCRYPTION
+      std::pair<std::string, SecByteBlock> encrypted = this->crypto_driver->AES_encrypt(updated_pk, byteblock_to_string(integer_to_byteblock(R)));
+      std::string R_ciphertext = std::get<0>(encrypted); // get ciphertext
+      SecByteBlock R_iv = std::get<1>(encrypted); // get iv
 
-      CryptoPP::SecByteBlock encrypted_R; // TODO: HOW TO ENCRYPT?
+      std::cout << "SENDING R TO OTHER USERS: " << byteblock_to_string(integer_to_byteblock(R)) << std::endl;
       // Generate g^ab(R)
-      std::tuple<SecByteBlock, std::string> encrypted_R_with_user = std::make_tuple(encrypted_R, this->id);
+      std::string final_id = who_key_with;
+      std::tuple<SecByteBlock, std::string> encrypted_R_with_user = std::make_tuple(string_to_byteblock(R_ciphertext), final_id);
+      
+      std::cout << "R_iv to send: " << byteblock_to_string(R_iv) << std::endl;
+      std::cout << "R_ciphertext to send: " << R_ciphertext << std::endl;
 
-      Server_GC_PK_Encrypted_Msg.other_users_pk.push_back(encrypted_R_with_user);
+      // adjust message to be sending the corresponding pk AND iv AND ciphertext
+      User_GC_AdminPublicValue_Msg.pk_with_admin = updated_pk;
+      User_GC_AdminPublicValue_Msg.R_iv = R_iv;
+      User_GC_AdminPublicValue_Msg.R_ciphertext = R_ciphertext;
+      User_GC_AdminPublicValue_Msg.who_key_with = who_key_with;
     }
-    std::vector<unsigned char> Server_GC_PK_Encrypted_Data;
-    Server_GC_PK_Encrypted_Msg.serialize(Server_GC_PK_Encrypted_Data);
-    network_driver->send(Server_GC_PK_Encrypted_Data);
+    std::cout << "ABOUT TO SEND ENCRYPTED R" << std::endl;
 
-    // encrypt R with each updated_pk
+    std::vector<unsigned char> User_GC_AdminPublicValue_Data = crypto_driver->encrypt_and_tag(AESKey, HMACKey, &User_GC_AdminPublicValue_Msg);
+    this->network_driver->send(User_GC_AdminPublicValue_Data);
+    std::cout << "JUST SEND ENCRYPTED R" << std::endl;
+
+
   } else {
-    // TODO: HOW TO DECRYPT?
-    std::cout << "NEED TO IMPLEMENT DECRYPTIONS FOR R" << std::endl;
+    std::cout << "NOT ADMIN, PERFORMING DECRYPTIONS FOR R" << std::endl;
+    bool found_my_pk_with_admin = false;
+    
+    ServerToUser_GC_AdminPublicValue_Message Server_GC_AdminPublicValue_Msg;
+    int num_users = other_users_pk.size();
+    
+    for (int i = 0; i < num_users; ++i) {
+      std::vector<unsigned char> Server_GC_AdminPublicValue_Data = this->network_driver->read();
+      std::cout << "JUST READ AN ADMIN PV" << std::endl;
+
+      auto dec_vrfy_Server_GC_AdminPublicValue_Data = crypto_driver->decrypt_and_verify(std::get<0>(keys), std::get<1>(keys), Server_GC_AdminPublicValue_Data);
+      if (std::get<1>(dec_vrfy_Server_GC_AdminPublicValue_Data) == false){
+        std::cout << "User could not decrypt/verify ServerToUser_GC_AdminPublicValue_Message" << std::endl;
+        network_driver->disconnect();
+        throw std::runtime_error("User could not decrypt/verify ServerToUser_GC_AdminPublicValue_Message");
+      }
+      Server_GC_AdminPublicValue_Msg.deserialize(std::get<0>(dec_vrfy_Server_GC_AdminPublicValue_Data));
+
+      // if (Server_GC_AdminPublicValue_Msg.who_key_with == this->id){ // found g^ac for user c or g^ab for user b
+      if (Server_GC_AdminPublicValue_Msg.who_key_with.find(this->id) != std::string::npos) {
+        std::cout << "found_my_pk_with_admin in here: " << Server_GC_AdminPublicValue_Msg.who_key_with << std::endl;
+        std::cout << "found_my_pk_with_admin in here AND SHARED KEY: " << byteblock_to_string(Server_GC_AdminPublicValue_Msg.pk_with_admin) << std::endl;
+        std::cout << "found_my_pk_with_admin in here AND IV: " << byteblock_to_string(Server_GC_AdminPublicValue_Msg.R_iv) << std::endl;
+        std::cout << "found_my_pk_with_admin in here AND CIPHERTEXT: " << Server_GC_AdminPublicValue_Msg.R_ciphertext << std::endl;
+        found_my_pk_with_admin = true;
+        break;
+      }
+    }
+    if (!found_my_pk_with_admin){
+      std::cout << "KEY WITH ADMIN FOR ID " << this->id << " NOT FOUND." << std::endl;
+      throw std::runtime_error("KEY WITH ADMIN FOR ID " + this->id + " not found.");
+    }
+    SecByteBlock key_with_admin = Server_GC_AdminPublicValue_Msg.pk_with_admin;
+    SecByteBlock R_iv = Server_GC_AdminPublicValue_Msg.R_iv; // used to decrypt R
+    std::string R_ciphertext = Server_GC_AdminPublicValue_Msg.R_ciphertext; 
+    
+    std::string R_decrypted = this->crypto_driver->AES_decrypt(key_with_admin, R_iv, R_ciphertext);
+    std::cout << "R DECRYPTED: " << R_decrypted << std::endl;
+    CryptoPP::Integer R = byteblock_to_integer(string_to_byteblock(R_decrypted));
   }
+  std::cout << "returning R: " << byteblock_to_string(integer_to_byteblock(R)) << std::endl;
+
   return integer_to_byteblock(R);
 }
+
 
 /**
  * Diffie-Hellman key exchange with server. This function should:
@@ -293,13 +377,7 @@ UserClient::HandleUserKeyExchange() {
   SecByteBlock DH_private_value = std::get<1>(initializedParams);
   SecByteBlock DH_public_value = std::get<2>(initializedParams);
 
-  // ServerToUser_IssuedCertificate_Message issuedCertMsg;  
-  // std::vector<unsigned char> issuedCertData = this->network_driver->read(); // q: get my certificate from server??
-  // issuedCertMsg.deserialize(issuedCertData);
-  // Certificate_Message certificate = issuedCertMsg.certificate;
   Certificate_Message certificate = this->certificate;
-  // std::string vrky = "HERE: ";
-  // std::cout << chvec2str(concat_string_and_rsakey(vrky, certificate.verification_key)) << std::endl;
   std::string signature = this->crypto_driver->RSA_sign(this->RSA_signing_key, concat_byteblock_and_cert(DH_public_value, certificate));
 
   UserToUser_DHPublicValue_Message userDHMsg;

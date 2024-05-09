@@ -113,14 +113,19 @@ bool ServerClient::HandleGCConnection(
   std::shared_ptr<NetworkDriver> network_driver,
   std::shared_ptr<CryptoDriver> crypto_driver, int index){
   
-  auto keys = HandleKeyExchange(network_driver, crypto_driver);
+  auto server_keys = HandleKeyExchange(network_driver, crypto_driver);
+
+  // Initiate shared key gen between users
+  std::cout << "NUM THREADS: "<<this->threads.size() << std::endl;
+
+  GenerateGCKey(network_driver, crypto_driver, server_keys); 
 
   while(1){
-    auto data = crypto_driver->decrypt_and_verify(keys.first, keys.second, network_driver->read());
+    auto data = crypto_driver->decrypt_and_verify(server_keys.first, server_keys.second, network_driver->read());
     if (!data.second){
       throw std::runtime_error("Invalid message");
     }
-
+  
     for (int i = 0; i < this->threads.size(); i++){
       if (i == index) continue;
       this->threads[i]->send(data.first);
@@ -147,42 +152,108 @@ bool ServerClient::HandleGCConnection(
 
 */
 void ServerClient::GenerateGCKey(std::shared_ptr<NetworkDriver> network_driver,
-    std::shared_ptr<CryptoDriver> crypto_driver, std::pair<CryptoPP::SecByteBlock, CryptoPP::SecByteBlock> keys){
+    std::shared_ptr<CryptoDriver> crypto_driver, std::pair<CryptoPP::SecByteBlock, CryptoPP::SecByteBlock> server_keys){
+    std::cout << "INSIDE SERVER GENERATE_GC_KEY" << std::endl;
+    SecByteBlock AESKey = std::get<0>(server_keys);
+    SecByteBlock HMACKey =  std::get<1>(server_keys);
     
     // Step 1
     UserToServer_GC_DHPublicValue_Message User_Server_GC_PK_Msg;    
     std::vector<unsigned char> pk_data = network_driver->read();
-    auto dec_vrfy_pk_data = crypto_driver->decrypt_and_verify(std::get<0>(keys), std::get<1>(keys), pk_data);
+    std::cout << "JUST READ OTHER KEY" << std::endl;
+
+    auto dec_vrfy_pk_data = crypto_driver->decrypt_and_verify(AESKey, HMACKey, pk_data);
     if (std::get<1>(dec_vrfy_pk_data) == false){
       std::cout << "Server could not decrypt/verify UserToServer_GC_DHPublicValue_Message" << std::endl;
       network_driver->disconnect();
       throw std::runtime_error("Server could not decrypt/verify UserToServer_GC_DHPublicValue_Message");
     }
+    std::cout << "ABOUT TO DESERIALIZE" << std::endl;
     User_Server_GC_PK_Msg.deserialize(std::get<0>(dec_vrfy_pk_data));
-    std::tuple<SecByteBlock, std::string> key_and_from_who = User_Server_GC_PK_Msg.key_and_from_who; // ex. (A, g^a)
-    this->all_users_pk.push_back(key_and_from_who); 
+    std::cout << "FINISHED DESERIALIZING" << std::endl;
+
+    CryptoPP::SecByteBlock key = User_Server_GC_PK_Msg.key; // ex. (A, g^a)
+    std::string from_who = User_Server_GC_PK_Msg.from_who;
+    bool is_admin = User_Server_GC_PK_Msg.is_admin;
+    
+    std::cout << "RECEIVED " << from_who << "'S PK: " << byteblock_to_string(key) << std::endl;
+    if (key.empty() || from_who == ""){
+      throw std::runtime_error("Deserialization failure for UserToServer_GC_DHPublicValue_Message");
+    }
+    std::tuple<SecByteBlock, std::string> key_and_from_who = std::make_tuple(key, from_who);
+    this->all_users_pk.push_back(key_and_from_who);  // TODO: make it so the admin is always sending first?
+    std::cout << "ADDED PK TO ARRAY, current size: " << this->all_users_pk.size() << std::endl;
 
     // Step 2
     // Create a copy of all_users_pk with only the users that do not match correct id
     std::vector<std::tuple<SecByteBlock, std::string>> other_users_pk;
-    std::string my_id = std::get<1>(key_and_from_who);
+    std::string my_id = from_who;
     std::copy_if(all_users_pk.begin(), all_users_pk.end(), std::back_inserter(other_users_pk),
         [&my_id](const auto& pk_and_user) { return std::get<1>(pk_and_user) != my_id; });
+    
+    std::cout << "PKs other than me: " << other_users_pk.size() << std::endl;
 
     ServerToUser_GC_DHPublicValue_Message Server_GC_PK_Msg;
     for (const auto& pk_and_user : other_users_pk) {
-      std::cout << "PK: " << byteblock_to_string(std::get<0>(pk_and_user)) << std::endl;
+      std::cout << "ORIGINAL PK: " << byteblock_to_string(std::get<0>(pk_and_user)) << std::endl;
       std::cout << "User ID: " << std::get<1>(pk_and_user) << std::endl;
-
       Server_GC_PK_Msg.other_users_pk.push_back(pk_and_user);
     }
     
-    std::vector<unsigned char> Server_GC_PK_Data;
-    Server_GC_PK_Msg.serialize(Server_GC_PK_Data);
+    std::cout << "PKs other than me to send: " << Server_GC_PK_Msg.other_users_pk.size() << std::endl;
+
+    std::vector<unsigned char> Server_GC_PK_Data = crypto_driver->encrypt_and_tag(AESKey, HMACKey, &Server_GC_PK_Msg);
     network_driver->send(Server_GC_PK_Data);
+    std::cout << "SENT PKS OTHER THAN ME" << std::endl;
+
+    // Step 3
+    if (is_admin){
+      UserToServer_GC_AdminPublicValue_Message User_GC_AdminPublicValue_Msg; // ex. g^ab(R), g^bc (R), g^ac (R)
+  
+      int num_users = this->all_users_pk.size();
+      std::cout << "num_users: " << num_users << std::endl;
+
+      for (int i = 0; i < num_users-1; ++i) { // -1 bc does not include the admin we are talking to
+      
+        std::cout << "ABOUT TO READ ADMIN PV DATA" << std::endl;
+        std::vector<unsigned char> User_GC_AdminPublicValue_Data = network_driver->read();
+
+        auto dec_vrfy_admin_pv_data = crypto_driver->decrypt_and_verify(AESKey, HMACKey, User_GC_AdminPublicValue_Data);
+        if (std::get<1>(dec_vrfy_admin_pv_data) == false){
+          std::cout << "Server could not decrypt/verify User_GC_AdminPublicValue_Msg" << std::endl;
+          network_driver->disconnect();
+          throw std::runtime_error("Server could not decrypt/verify User_GC_AdminPublicValue_Msg");
+        }
+
+        User_GC_AdminPublicValue_Msg.deserialize(std::get<0>(dec_vrfy_admin_pv_data));
+        CryptoPP::SecByteBlock pk_with_admin = User_GC_AdminPublicValue_Msg.pk_with_admin; 
+        CryptoPP::SecByteBlock R_iv = User_GC_AdminPublicValue_Msg.R_iv;
+        std::string R_ciphertext = User_GC_AdminPublicValue_Msg.R_ciphertext;
+        std::string who_key_with = User_GC_AdminPublicValue_Msg.who_key_with;
+
+        std::cout << "ADMIN PV DATA PK_W_ADMIN: " << byteblock_to_string(pk_with_admin) << std::endl;
+        std::cout << "ADMIN PV DATA R_iv: " << byteblock_to_string(R_iv) << std::endl;
+        std::cout << "ADMIN PV DATA R_ciphertext: " << R_ciphertext << std::endl;
+        std::cout << "ADMIN PV DATA who_key_with: " << who_key_with << std::endl;
+
+        ServerToUser_GC_AdminPublicValue_Message Server_GC_AdminPublicValue_Msg;
+        Server_GC_AdminPublicValue_Msg.pk_with_admin = pk_with_admin;
+        Server_GC_AdminPublicValue_Msg.R_iv = R_iv;
+        Server_GC_AdminPublicValue_Msg.R_ciphertext = R_ciphertext;
+        Server_GC_AdminPublicValue_Msg.who_key_with = who_key_with;
+        
+        for (int i=0; i < num_users-1; ++i){ // distribute this encryption to other users so they can find R
+          std::vector<unsigned char> Server_GC_PK_Data = crypto_driver->encrypt_and_tag(AESKey, HMACKey, &Server_GC_AdminPublicValue_Msg);
+          network_driver->send(Server_GC_PK_Data);
+          std::cout << "ABOUT TO SEND Server_GC_PK_Data" << std::endl;
+        }
+      }
+    } else {
+      std::cout << "This user is not an admin" << std::endl;
+    }
+
 
 }
-
 
 /**
  * Handle keygen and handle either logins or registrations. This function

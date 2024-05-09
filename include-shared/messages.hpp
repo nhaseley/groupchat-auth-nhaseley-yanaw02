@@ -35,6 +35,7 @@ enum T {
   UserToUser_Message_Message = 12,
   UserToServer_GC_DHPublicValue_Message = 13,
   ServerToUser_GC_DHPublicValue_Message = 14,
+
 };
 };
 MessageType::T get_message_type(std::vector<unsigned char> &data);
@@ -102,7 +103,10 @@ struct ServerToUser_DHPublicValue_Message : public Serializable {
 };
 
 struct UserToServer_GC_DHPublicValue_Message : public Serializable {
-  std::tuple<CryptoPP::SecByteBlock, std::string> key_and_from_who;  // ex. (A, g^a)
+  // std::tuple<CryptoPP::SecByteBlock, std::string> key_and_from_who;  // ex. (A, g^a)
+  CryptoPP::SecByteBlock key;
+  std::string from_who;
+  bool is_admin;
  
   void serialize(std::vector<unsigned char> &data);
   int deserialize(std::vector<unsigned char> &data);
@@ -110,6 +114,27 @@ struct UserToServer_GC_DHPublicValue_Message : public Serializable {
 
 struct ServerToUser_GC_DHPublicValue_Message : public Serializable {
   std::vector<std::tuple<CryptoPP::SecByteBlock, std::string>> other_users_pk; // [ (B, g^b), (C, g^c) ]
+  // std::vector<UserToServer_GC_DHPublicValue_Message> other_users_pk;
+
+  void serialize(std::vector<unsigned char> &data);
+  int deserialize(std::vector<unsigned char> &data);
+};
+
+struct UserToServer_GC_AdminPublicValue_Message : public Serializable {
+  CryptoPP::SecByteBlock pk_with_admin;  // ex. g^ab
+  CryptoPP::SecByteBlock R_iv; // used to encrypt R
+  std::string R_ciphertext; // encrypted R, ex. g^ab (R)
+  std::string who_key_with;
+ 
+  void serialize(std::vector<unsigned char> &data);
+  int deserialize(std::vector<unsigned char> &data);
+};
+
+struct ServerToUser_GC_AdminPublicValue_Message : public Serializable {
+  CryptoPP::SecByteBlock pk_with_admin;  // ex. g^ab
+  CryptoPP::SecByteBlock R_iv; // used to decrypt R
+  std::string R_ciphertext; // R to decrypt, ex. g^ab (R)
+  std::string who_key_with;
 
   void serialize(std::vector<unsigned char> &data);
   int deserialize(std::vector<unsigned char> &data);

@@ -28,7 +28,7 @@ public:
   void HandleLoginOrRegister(std::string input);
   void DoLoginOrRegister(std::string input);
   void HandleUser(std::string input);
-  void DoMessageGC();
+  void DoMessageGC(bool is_admin);
   void HandleGCMessage(std::string input);
   CryptoPP::SecByteBlock GenerateGCKey(bool is_admin, std::pair<CryptoPP::SecByteBlock, CryptoPP::SecByteBlock> keys);
 
