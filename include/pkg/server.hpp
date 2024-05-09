@@ -55,11 +55,20 @@ private:
   std::vector<std::tuple<SecByteBlock, std::string>> all_users_pk;
   
   void GenerateGCKey(std::shared_ptr<NetworkDriver> network_driver,
-    std::shared_ptr<CryptoDriver> crypto_driver, std::pair<CryptoPP::SecByteBlock, CryptoPP::SecByteBlock> keys);
+    std::shared_ptr<CryptoDriver> crypto_driver, 
+    std::pair<CryptoPP::SecByteBlock, CryptoPP::SecByteBlock> keys, 
+    std::string my_id,
+    int index);
   void ListenForConnections(int port);
   void Reset(std::string _);
   void Users(std::string _);
+  void SendToAll(std::vector<unsigned char> data, int index);
+  std::string GetKeys(std::shared_ptr<NetworkDriver> network_driver,
+    std::shared_ptr<CryptoDriver> crypto_driver, 
+    std::pair<CryptoPP::SecByteBlock, CryptoPP::SecByteBlock> server_keys,
+    int index);
 
   std::vector<std::shared_ptr<NetworkDriver>> threads;
   std::mutex mtx;
+  int admin_index;
 };
