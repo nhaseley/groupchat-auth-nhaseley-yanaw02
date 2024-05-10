@@ -1,15 +1,12 @@
-# Project Name
-
-CryptoChat: Implementing Secure Group Communication
+# CryptoChat: Implementing Secure Group Communication
 
 ## Description
 
-Our final project aims to create a secure server-client authentication system 
-that supports a 3-person group chat. Our goal is to provide users with a 
-platform where they can chat confidently, knowing that their conversations are 
-protected from unwanted access and hiding the group structure from the server. 
-This effort represents an important step towards enhancing digital privacy in 
-an age where data security is increasingly precarious.
+Our final project implements a messaging protocol supporting three-person 
+group chats, providing users with a platform where they can chat confidently, 
+knowing that their conversations are protected from the server. This effort 
+represents an important step towards enhancing digital privacy in an age where 
+data security is increasingly precarious.
 
 TODO: add final report link
 
@@ -22,9 +19,7 @@ From here you can access the code from both your computer and from the Docker
 container. For instructions on downloading and accessing the CS1515 Docker 
 container, please visit this [link](https://cs.brown.edu/courses/csci1515/spring-2024/misc/devenv.html).
 
-2. Navigate to the build folder:
-
-`cd build`
+2. Navigate to the build folder: `cd build`
 
 3. Install dependencies:
 Run `cmake ..`. This will generate a set of Makefiles building the whole project. 
@@ -45,7 +40,7 @@ listening for connections and handle them in separate threads.
 
 ## Project Contributions
 
-Nya
+### Nya
 - Implemented and debugged cryptographic key generation protocol on both User and Server side
     - `UserClient::HandleGCMessage`
     - `ServerClient::GetKeys`
@@ -56,7 +51,7 @@ Nya
 - Completed final project report and presentation
 - Completed `README.md`
 
-Amy
+### Amy
 - Implemented set up basic, unsafe communication between server and users without any crytographic encryption 
     - `ServerClient::HandleGCConnection`
     - `ServerClient::SendToAll`
@@ -240,7 +235,7 @@ This code snippet provides a comprehensive server-side implementation for handli
 ## Acknowledgments
 
 Thank you so much to our wonderful CS1515 professor Peihan Miao and final 
-project teaching assistant Nishchay Parashar (nishchayp) for their support on 
+project teaching assistant Nishchay Parashar (Github: nishchayp) for their support on 
 this project as well as throughout this semester!
 
 ## Disclaimer
@@ -248,4 +243,4 @@ this project as well as throughout this semester!
 This project was a final project built off the foundations from 
 Brown University's CS1515 Applied Cryptography Auth Project.
 
-Feel free to customize the sections and content based on your project's specifics!
+Feel free to play around and watch the magic of secure communication unfold!
