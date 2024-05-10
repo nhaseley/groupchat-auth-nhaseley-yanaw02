@@ -8,7 +8,8 @@ knowing that their conversations are protected from the server. This effort
 represents an important step towards enhancing digital privacy in an age where 
 data security is increasingly precarious.
 
-TODO: add final report link
+Full report: https://drive.google.com/file/d/15RrW8Ytpg3xrUlh7yFa7_Pvys0IMF0qq/view?usp=drive_link 
+Presentation Link: https://drive.google.com/file/d/1DyFA7w3YgKkbBEUSkCqiOuASUupqXTrG/view?usp=drive_link 
 
 ## Installation
 
@@ -37,6 +38,8 @@ deal with other user binaries. They call the corresponding `Handle` functions in
 To run the server binary, run `./auth_server <port> <config file>`. We have 
 provided server config files for you to use. Afterwards, the server will start 
 listening for connections and handle them in separate threads.
+
+TODO: ADJUST WITH COMMAND FOR RUNNING EACH USER
 
 ## Project Contributions
 
